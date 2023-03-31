@@ -55,7 +55,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         
         # Create (title)
         #remove quotes from title
-        title = title.replace('"','')
+        title = title.replace('"','\\"')
         title_literal = f'"{title}"'
         triples = f'{show_uri} <http://netflixUA.org/title> {title_literal} . \n'
         
