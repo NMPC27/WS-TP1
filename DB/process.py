@@ -2,6 +2,7 @@
 #convert csv to rdf
 import csv
 from time import sleep
+from datetime import datetime
 
 # create ids for each director or cast member
 
@@ -29,8 +30,10 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     
     all_triples = ""
+    once = set()
     # Loop through each row of the CSV file
     for row in reader:
+
         # Extract the data from each row
         show_id = row['show_id']
         typeUA = row['type']
@@ -44,13 +47,15 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         duration = row['duration']
         listed_in = row['listed_in']
         description = row['description']
-        print(show_id)
-        if(show_id == "s1000"):
+        # print(show_id)
+        if(show_id == "0"): # s8421
             break
         # Convert the show_id field to an N-Triples URI
         show_uri = f'<http://netflixUA.org/show/{show_id}>' 
         
         # Create (title)
+        #remove quotes from title
+        title = title.replace('"','')
         title_literal = f'"{title}"'
         triples = f'{show_uri} <http://netflixUA.org/title> {title_literal} . \n'
         
@@ -60,42 +65,104 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
             
         director_split = director.split(",")
         for direct in director_split:
-            dir = direct.strip().replace('"','').replace(" ","_")
-            director_uri = f'<http://netflixUA.org/director/id_{dir}>'
+            dir = direct.strip().replace('"','').replace(" ","_").replace(".","")
+            director_uri = f'<http://netflixUA.org/director/{dir.lower()}>'
             triples += f'{show_uri} <http://netflixUA.org/director> {director_uri} . \n'
-            triples += f'{director_uri} <http://netflixUA.org/name> "{dir.replace("_"," ")}" .\n'
+            if dir not in once:
+                triples += f'{director_uri} <http://netflixUA.org/name> "{dir.replace("_"," ")}" .\n'
+                once.add(dir)
             
         #create all cast
         if cast == "":
             cast = "UNKNOWN"
             
-        director_split = cast.split(",")
-        for direct in director_split:
-            dir = direct.strip().replace('"','').replace(" ","_")
-            director_uri = f'<http://netflixUA.org/cast/id_{dir}>'
-            triples += f'{show_uri} <http://netflixUA.org/cast> {director_uri} . \n'
-            triples += f'{director_uri} <http://netflixUA.org/name> "{dir.replace("_"," ")}" .\n'
+        cast_split = cast.split(",")
+        for c in cast_split:
+            c = c.strip().replace('"','').replace(" ","_").replace(".","")
+            
+            cast_uri = f'<http://netflixUA.org/cast/{c.strip().replace(" ","_").lower()}>'
+            triples += f'{show_uri} <http://netflixUA.org/cast> {cast_uri} . \n'
+            if c not in once:
+                triples += f'{cast_uri} <http://netflixUA.org/name> "{c.strip().replace("_"," ")}" .\n'
+                once.add(c)
+
             
         # Create (type)
         triples += f'{show_uri} <http://netflixUA.org/type> "{typeUA}" . \n'
-        all_triples += triples
+
+        # Create (country)  
+        if country == "":
+            country = "UNKNOWN"
+        country_split = country.split(",")
+        for c in country_split:
+            c = c.strip().replace('"','').replace(" ","_").replace(".","")
+
+            country_uri = f'<http://netflixUA.org/country/{c.lower()}>'
+
+            triples += f'{show_uri} <http://netflixUA.org/country> {country_uri} . \n'
+            if c not in once:
+                triples += f'{country_uri} <http://netflixUA.org/name> "{c.replace("_"," ")}" .\n'
+                once.add(c)
     
+        # Create (date_added)
+        if date_added == "":
+            date_added = "UNKNOWN"
+            triples += f'{show_uri} <http://netflixUA.org/date_added> "{date_added}" . \n'
+        else:
+            date_obj = datetime.strptime(date_added.strip(), "%B %d, %Y")
+            date_formatted = date_obj.strftime("%Y-%m-%d")
+            triples += f'{show_uri} <http://netflixUA.org/date_added> "{date_formatted}" . \n'
+
+        # Create (release_year)
+        if release_year == "":
+            release_year = "UNKNOWN"    
+        release_year_literal = f'"{release_year}"'
+        triples += f'{show_uri} <http://netflixUA.org/release_year> {release_year_literal} . \n'
+
+        # Create (rating)
+        if rating == "":
+            rating = "UNKNOWN"
+        rating_literal = f'"{rating}"'
+        triples += f'{show_uri} <http://netflixUA.org/rating> {rating_literal} . \n'
+
+        # Create (duration)
+        if duration == "":
+            duration = "UNKNOWN"
+        duration_literal = f'"{duration}"'
+        triples += f'{show_uri} <http://netflixUA.org/duration> {duration_literal} . \n'
+
+        # Create (listed_in)
+        if listed_in == "":
+            listed_in = "UNKNOWN"
+        listed_in_split = listed_in.split(",")
+        for l in listed_in_split:
+            l = l.strip().replace('"','').replace(" ","_").replace(".","")
+
+            listed_in_uri = f'<http://netflixUA.org/listed_in/{l.lower()}>'
+
+            triples += f'{show_uri} <http://netflixUA.org/listed_in> {listed_in_uri} . \n'
+            if l not in once:
+                triples += f'{listed_in_uri} <http://netflixUA.org/name> "{l.replace("_"," ")}" .\n'
+                once.add(l)
+        
+        # Create (description)
+        if description == "":
+            description = "UNKNOWN"
+        #remove all carriage returns and new lines
+        desc = description.replace("\r","").replace("\n","")
+        #escape all quotes
+        desc = desc.replace('"','\\"')
+        desc = desc.replace("'","\\'")
+        
+        description_literal = f'"{desc}"'
+        triples += f'{show_uri} <http://netflixUA.org/description> {description_literal} . \n'
+
+        print(show_id)
+            
+        all_triples += triples
+
     #export all triples to file
     with open("netflix_triples.nt", "w", encoding="utf-8") as f:
         # print(all_triples)
         f.write(all_triples)
         f.close()
-        
-        
-# # Convert the show_id field to an N-Triples URI
-# show_uri = f'<http://example.org/show/{show_id}>'
-
-# # Convert the title field to an N-Triples literal
-# title_literal = f'"{title}"'
-
-# # Convert the director field to an N-Triples URI
-# director_uri = f'<http://example.org/director/{director}>'
-
-# # Combine the triples
-# triples = f'{show_uri} <http://example.org/title> {title_literal} .\n'
-# triples += f'{show_uri} <http://example.org/director> {director_uri} .'
