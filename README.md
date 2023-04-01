@@ -10,3 +10,7 @@ TODO:
 -poder inserir comentarios
 -poder remover filmes e editar
 -login????
+-graficos
+-muitos filtros
+-clicables
+-create/update/delete coisas
