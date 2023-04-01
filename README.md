@@ -7,4 +7,6 @@ atençao o repositorio stparkle tem de bater certo com a linha
 
 
 TODO:
--templates
+-poder inserir comentarios
+-poder remover filmes e editar
+-login????

@@ -30,6 +30,57 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     
     all_triples = ""
+    #fix unknown values
+    all_triples += f'<http://netflixUA.org/director/unknown> <http://netflixUA.org/name> "UNKNOWN" .\n'
+    all_triples += f'<http://netflixUA.org/country/unknown> <http://netflixUA.org/name> "UNKNOWN" .\n'
+    all_triples += f'<http://netflixUA.org/listed_in/unknown> <http://netflixUA.org/name> "UNKNOWN" .\n'
+    
+    genreDict = {
+        "Documentaries" : "Documentary",
+        "International TV Shows" : "International",
+        "TV Dramas" : "Drama",
+        "TV Mysteries" : "Mystery",
+        "Crime TV Shows" : "Crime",
+        "TV Action & Adventure" : "Action & Adventure",
+        "Docuseries" : "Documentary",
+        "Reality TV" : "Reality Show",
+        "Romantic TV Shows" : "Romance",
+        "TV Comedies" : "Comedy",
+        "TV Horror" : "Horror",
+        "Children & Family Movies" : "Children & Family",
+        "Dramas" : "Drama",
+        "Independent Movies" : "Independent",
+        "International Movies" : "International",
+        "British TV Shows" : "British",
+        "Comedies" : "Comedy",
+        "Spanish-Language TV Shows" : "Spanish",
+        "Thrillers" : "Thriller",
+        "Romantic Movies" : "Romance",
+        "Music & Musicals" : "Music & Musical",
+        "Horror Movies" : "Horror",
+        "Sci-Fi & Fantasy" : "Sci-Fi & Fantasy",
+        "TV Thrillers" : "Thriller",
+        "Kids' TV" : "Children & Family",
+        "Action & Adventure" : "Action & Adventure",
+        "TV Sci-Fi & Fantasy" : "Sci-Fi & Fantasy",
+        "Classic Movies" : "Classic",
+        "Anime Features" : "Anime",
+        "Sports Movies" : "Sports",
+        "Anime Series" : "Anime",
+        "Korean TV Shows" : "Korean",
+        "Science & Nature TV" : "Science & Nature",
+        "Teen TV Shows" : "Teen",
+        "Cult Movies" : "", #! se estragar mudar
+        "TV Shows" : "",  #! se estragar mudar
+        "Faith & Spirituality" : "Faith & Spirituality",
+        "LGBTQ Movies" : "LGBTQ",
+        "Stand-Up Comedy" : "Comedy",
+        "Movies" : "", #! se estragar mudar
+        "Stand-Up Comedy & Talk Shows" : "Comedy",
+        "Classic & Cult TV" : "", #! se estragar mudar
+    }
+    
+    
     once = set()
     # Loop through each row of the CSV file
     for row in reader:
@@ -93,6 +144,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         # Create (country)  
         if country == "":
             country = "UNKNOWN"
+            
         country_split = country.split(",")
         for c in country_split:
             c = c.strip().replace('"','').replace(" ","_").replace(".","")
@@ -136,6 +188,10 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
             listed_in = "UNKNOWN"
         listed_in_split = listed_in.split(",")
         for l in listed_in_split:
+            l = genreDict[l.strip()]
+            if l == "":
+                continue
+            
             l = l.strip().replace('"','').replace(" ","_").replace(".","")
 
             listed_in_uri = f'<http://netflixUA.org/listed_in/{l.lower()}>'
@@ -165,4 +221,16 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
     with open("netflix_triples.nt", "w", encoding="utf-8") as f:
         # print(all_triples)
         f.write(all_triples)
+        
+        #open movies_img.csv and TVshow_img.csv
+        with open("movies_img.csv", "r", encoding="utf-8") as f1:
+            #copy everything from movies_img.csv to netflix_triples.nt
+            f.write(f1.read())
+        with open("TVshow_img.csv", "r", encoding="utf-8") as f2:
+            #copy everything from TVshow_img.csv to netflix_triples.nt
+            f.write(f2.read())
+        
+
         f.close()
+        f1.close()
+        f2.close()
