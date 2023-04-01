@@ -36,6 +36,7 @@ def select_all_12():
             ?title_id mov:date_added ?date_add
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add ?director_name
+        ORDER BY RAND()
         LIMIT 12
     """
     payload_query = {"query": query}
@@ -69,6 +70,7 @@ def select_all_movies_12():
             ?title_id mov:date_added ?date_add
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add
+        ORDER BY RAND()
         LIMIT 12
     """
 
@@ -107,6 +109,7 @@ def select_all_TVshow_12():
             ?title_id mov:date_added ?date_add
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add
+        ORDER BY RAND()
         LIMIT 12
     """
 
