@@ -1309,6 +1309,7 @@ ul {
   position: relative;
   display: block;
   margin-top: 10px;
+  height: 7.8vh;
 }
 .card__title {
   font-size: 18px;
@@ -1346,7 +1347,6 @@ ul {
   font-family: 'Open Sans', sans-serif;
 }
 .card__category a:after {
-  content: ',';
   position: absolute;
   display: block;
   left: 100%;

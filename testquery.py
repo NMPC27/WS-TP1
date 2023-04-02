@@ -14,7 +14,7 @@ def select_all_12():
     query = """
         PREFIX mov:<http://netflixUA.org/>
 
-        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)  (GROUP_CONCAT(DISTINCT ?cast_person; SEPARATOR=", ") as ?cast)
+        SELECT DISTINCT ?title ?type ?title_id
         WHERE {
             ?title_id mov:title ?title .
             ?title_id mov:type ?type .
@@ -34,17 +34,23 @@ def select_all_12():
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
         ORDER BY Rand()
-        LIMIT 12
     """
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
     res = json.loads(res)
     # print (res)
     res = res['results']['bindings']
-    for e in res:
-        e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
+
     return res
 
+#print(select_all_12()) to file:
+with open('test.json', 'w') as outfile:
+    res = {}
+    
+    for e in select_all_12():
+        e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
+        res[e['title']['value']] = {"id": e['title_id']['value'], "type": e['type']['value']}
+    json.dump(res, outfile)
 
     
 def select_all_movies_12():
@@ -133,7 +139,7 @@ def get_showById(id):
 
     query = """
         PREFIX mov:<http://netflixUA.org/>
-        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors) (GROUP_CONCAT(DISTINCT ?cast_person; SEPARATOR=", ") as ?cast)
+        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)
 
         where { 
             <http://netflixUA.org/show/"""+id+"""> mov:title ?title .
@@ -149,8 +155,6 @@ def get_showById(id):
             <http://netflixUA.org/show/"""+id+"""> mov:description ?desc .
             <http://netflixUA.org/show/"""+id+"""> mov:release_year ?release_year .
             <http://netflixUA.org/show/"""+id+"""> mov:date_added ?date_add .
-            <http://netflixUA.org/show/"""+id+"""> mov:cast ?person .
-    		?person mov:name ?cast_person .
     }    
     group by ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
     """
@@ -202,6 +206,7 @@ def select_search(name):
     #     print("-----------------")
     return res['results']['bindings']
         
+# select_search("King Jack")
 def searchQuery(title=None, type=None, genre=None, country=None, director=None, actor=None, release_year=None,date_added=None, limit=None,cast = None):
 
     query = """
@@ -271,6 +276,10 @@ def searchQuery(title=None, type=None, genre=None, country=None, director=None, 
         print(e['genres']['value'])
         print("-----------------")
     return res['results']['bindings']
+
+
+# searchQuery(limit=12,genre="LGBTQ")
+
 
 ########################################################################
 

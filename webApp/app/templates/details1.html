@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load custom_filters %}
 
 <head>
 	<meta charset="utf-8">
@@ -183,7 +184,21 @@
 									</div>
 
 									<ul class="card__meta">
-										<li><span>Genre:</span> <a href="#">{{dic.genres.value}}</a></li>
+										{% comment %} check length of dic.genres.value|split(",") {% endcomment %}
+										<div>
+											<li>
+												<span>
+													{% if dic.genres.value|split:', '|length == 1 %}
+														Genre:
+													{% else %}
+														Genres:
+													{% endif %}
+												</span>
+												{% for genre in dic.genres.value|split:', ' %}
+													<a href="/search?genre={{ genre }}">{{ genre }}</a>{% if not loop.last %} {% endif %}
+												{% endfor %}
+											</li>
+										{% comment %} <li><span>Genre:</span> <a href="#">{{dic.genres.value}}</a></li> {% endcomment %}
 										<li><span>Release year:</span> {{dic.release_year.value}}</li>
 										<li><span>Country:</span> {{dic.countries.value}}</li>
 										<li><span>Date added:</span> {{dic.date_add.value}}</li>

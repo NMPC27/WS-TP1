@@ -44,7 +44,7 @@
 						<div class="header__content">
 							<!-- header logo -->
 							<a href="index.html" class="header__logo">
-								<img src="../static/../static/img/logo.svg" alt="">
+								<img src="../static/img/logo.svg" alt="">
 							</a>
 							<!-- end header logo -->
 
@@ -148,13 +148,13 @@
 				<div class="col-12">
 					<div class="section__wrap">
 						<!-- section title -->
-						<h2 class="section__title">Catalog list</h2>
+						<h2 class="section__title">Filter</h2>
 						<!-- end section title -->
 
 						<!-- breadcrumb -->
 						<ul class="breadcrumb">
 							<li class="breadcrumb__item"><a href="#">Home</a></li>
-							<li class="breadcrumb__item breadcrumb__item--active">Catalog list</li>
+							<li class="breadcrumb__item breadcrumb__item--active">Filter</li>
 						</ul>
 						<!-- end breadcrumb -->
 					</div>
@@ -169,6 +169,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
+					<form action="/filter" method="get">
 					<div class="filter__content">
 						<div class="filter__items">
 							<!-- filter item -->
@@ -176,102 +177,227 @@
 								<span class="filter__item-label">GENRE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="Action/Adventure">
+									<input type="button" value={{ filter_genre }}>
 									<span></span>
 								</div>
 
 								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-genre">
-									<li>Action/Adventure</li>
-									<li>Animals</li>
-									<li>Animation</li>
-									<li>Biography</li>
+									<li>All<li>
+									<li>Action & Adventure</li>
+									<li>Anime</li>
+									<li>British</li>
+									<li>Children & Family</li>
+									<li>Classic</li>
 									<li>Comedy</li>
-									<li>Cooking</li>
-									<li>Dance</li>
+									<li>Crime</li>
 									<li>Documentary</li>
 									<li>Drama</li>
-									<li>Education</li>
-									<li>Entertainment</li>
-									<li>Family</li>
-									<li>Fantasy</li>
-									<li>History</li>
+									<li>Faith & Spirituality</li>
 									<li>Horror</li>
 									<li>Independent</li>
 									<li>International</li>
-									<li>Kids</li>
-									<li>Kids & Family</li>
-									<li>Medical</li>
-									<li>Military/War</li>
-									<li>Music</li>
-									<li>Musical</li>
-									<li>Mystery/Crime</li>
-									<li>Nature</li>
-									<li>Paranormal</li>
-									<li>Politics</li>
-									<li>Racing</li>
+									<li>Korean</li>
+									<li>LGBTQ</li>
+									<li>Music & Musical</li>
+									<li>Mystery</li>
+									<li>Reality Show</li>
 									<li>Romance</li>
-									<li>Sci-Fi/Horror</li>
-									<li>Science</li>
-									<li>Science Fiction</li>
-									<li>Science/Nature</li>
+									<li>Sci-Fi & Fantasy</li>
+									<li>Science & Nature</li>
 									<li>Spanish</li>
-									<li>Travel</li>
-									<li>Western</li>
+									<li>Sports</li>
+									<li>Teen</li>
+									<li>Thriller</li>
 								</ul>
 							</div>
 							<!-- end filter item -->
 
 							<!-- filter item -->
-							<div class="filter__item" id="filter__quality">
-								<span class="filter__item-label">QUALITY:</span>
-
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="HD 1080">
-									<span></span>
-								</div>
-
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-quality">
-									<li>HD 1080</li>
-									<li>HD 720</li>
-									<li>DVD</li>
-									<li>TS</li>
-								</ul>
-							</div>
-							<!-- end filter item -->
-
-							<!-- filter item -->
-							<div class="filter__item" id="filter__rate">
-								<span class="filter__item-label">IMBd:</span>
-
-								<div class="filter__item-btn dropdown-toggle" role="button" id="filter-rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="filter__range">
-										<div id="filter__imbd-start"></div>
-										<div id="filter__imbd-end"></div>
-									</div>
-									<span></span>
-								</div>
-
-								<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-rate">
-									<div id="filter__imbd"></div>
-								</div>
-							</div>
-							<!-- end filter item -->
-
-							<!-- filter item -->
-							<div class="filter__item" id="filter__year">
+							<div class="filter__item" id="filter_year">
 								<span class="filter__item-label">RELEASE YEAR:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="button" id="filter-year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<div class="filter__range">
-										<div id="filter__years-start"></div>
-										<div id="filter__years-end"></div>
-									</div>
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input type="button" value={{ filter_year }}>
 									<span></span>
 								</div>
 
-								<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-year">
-									<div id="filter__years"></div>
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_year">
+									<li>All</li>
+									<li>2021</li>
+									<li>2020</li>
+									<li>2019</li>
+									<li>2018</li>
+									<li>2017</li>
+									<li>2016</li>
+									<li>2010-2015</li>
+									<li>2000-2009</li>
+									<li>1990-1999</li>
+									<li>1970-1989</li>
+									<li>1950-1969</li>
+									<li>1900-1949</li>
+								</ul>
+							</div>
+							<!-- end filter item -->
+
+							<!-- filter item -->
+							<div class="filter__item" id="filter_country">
+								<span class="filter__item-label">COUNTRY:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_country" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input type="button" value={{ filter_country }}>
+									<span></span>
 								</div>
+
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_country">
+									<li>All</li>
+									<li>Afghanistan</li>
+									<li>Albania</li>
+									<li>Algeria</li>
+									<li>Angola</li>
+									<li>Argentina</li>
+									<li>Armenia</li>
+									<li>Australia</li>
+									<li>Austria</li>
+									<li>Azerbaijan</li>
+									<li>Bahamas</li>
+									<li>Bangladesh</li>
+									<li>Belarus</li>
+									<li>Belgium</li>
+									<li>Bermuda</li>
+									<li>Botswana</li>
+									<li>Brazil</li>
+									<li>Bulgaria</li>
+									<li>Burkina Faso</li>
+									<li>Cambodia</li>
+									<li>Cameroon</li>
+									<li>Canada</li>
+									<li>Cayman Islands</li>
+									<li>Chile</li>
+									<li>China</li>
+									<li>Colombia</li>
+									<li>Croatia</li>
+									<li>Cuba</li>
+									<li>Cyprus</li>
+									<li>Czech Republic</li>
+									<li>Denmark</li>
+									<li>Dominican Republic</li>
+									<li>East Germany</li>
+									<li>Ecuador</li>
+									<li>Egypt</li>
+									<li>Ethiopia</li>
+									<li>Finland</li>
+									<li>France</li>
+									<li>Georgia</li>
+									<li>Germany</li>
+									<li>Ghana</li>
+									<li>Greece</li>
+									<li>Guatemala</li>
+									<li>Hong Kong</li>
+									<li>Hungary</li>
+									<li>Iceland</li>
+									<li>India</li>
+									<li>Indonesia</li>
+									<li>Iran</li>
+									<li>Iraq</li>
+									<li>Ireland</li>
+									<li>Israel</li>
+									<li>Italy</li>
+									<li>Jamaica</li>
+									<li>Japan</li>
+									<li>Jordan</li>
+									<li>Kazakhstan</li>
+									<li>Kenya</li>
+									<li>Kuwait</li>
+									<li>Latvia</li>
+									<li>Lebanon</li>
+									<li>Liechtenstein</li>
+									<li>Lithuania</li>
+									<li>Luxembourg</li>
+									<li>Malawi</li>
+									<li>Malaysia</li>
+									<li>Malta</li>
+									<li>Mauritius</li>
+									<li>Mexico</li>
+									<li>Mongolia</li>
+									<li>Montenegro</li>
+									<li>Morocco</li>
+									<li>Mozambique</li>
+									<li>Namibia</li>
+									<li>Nepal</li>
+									<li>Netherlands</li>
+									<li>New Zealand</li>
+									<li>Nicaragua</li>
+									<li>Nigeria</li>
+									<li>Norway</li>
+									<li>Pakistan</li>
+									<li>Palestine</li>
+									<li>Panama</li>
+									<li>Paraguay</li>
+									<li>Peru</li>
+									<li>Philippines</li>
+									<li>Poland</li>
+									<li>Portugal</li>
+									<li>Puerto Rico</li>
+									<li>Qatar</li>
+									<li>Romania</li>
+									<li>Russia</li>
+									<li>Samoa</li>
+									<li>Saudi Arabia</li>
+									<li>Senegal</li>
+									<li>Serbia</li>
+									<li>Singapore</li>
+									<li>Slovakia</li>
+									<li>Slovenia</li>
+									<li>Somalia</li>
+									<li>South Africa</li>
+									<li>South Korea</li>
+									<li>Soviet Union</li>
+									<li>Spain</li>
+									<li>Sri Lanka</li>
+									<li>Sudan</li>
+									<li>Sweden</li>
+									<li>Switzerland</li>
+									<li>Syria</li>
+									<li>Taiwan</li>
+									<li>Thailand</li>
+									<li>Turkey</li>
+									<li>Uganda</li>
+									<li>Ukraine</li>
+									<li>United Arab Emirates</li>
+									<li>United Kingdom</li>
+									<li>United States</li>
+									<li>Uruguay</li>
+									<li>Vatican City</li>
+									<li>Venezuela</li>
+									<li>Vietnam</li>
+									<li>West Germany</li>
+									<li>Zimbabwe</li>
+								</ul>
+							</div>
+							<!-- end filter item -->
+
+							<!-- filter item -->
+							<div class="filter__item" id="filter_rate">
+								<span class="filter__item-label">RATING:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input type="button" value={{ filter_rate }}>
+									<span></span>
+								</div>
+
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_rate">
+									<li>All</li>
+									<li>9-10</li>
+									<li>8-9</li>
+									<li>7-8</li>
+									<li>6-7</li>
+									<li>5-6</li>
+									<li>4-5</li>
+									<li>3-4</li>
+									<li>2-3</li>
+									<li>1-2</li>
+									<li>0-1</li>
+								</ul>
 							</div>
 							<!-- end filter item -->
 						</div>
@@ -281,6 +407,7 @@
 						<!-- end filter btn -->
 					</div>
 				</div>
+			</form>
 			</div>
 		</div>
 	</div>
@@ -290,248 +417,37 @@
 	<div class="catalog">
 		<div class="container">
 			<div class="row">
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/../static/img/covers/cover.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
+				{% for show in shows %} <!-- size 12 -->
+					<!-- card -->
+					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+						<div class="card">
+							<div class="card__cover">
+								{% if show.img.value != "NO_IMAGE" %}
+									<img src="{{ show.img.value }}" alt="" style="width: 100%; height: 240px;">
+								{% else %}
+									<img src="../static/img/NO_IMAGE.jpg" alt="Image not found" style="width: 100%; height: 240px;">
+								{% endif %}
+								<a href="/details/{{show.title_id.value}}" class="card__play">
+									<i class="icon ion-ios-play"></i>
+								</a>
 							</div>
+							<div class="card__content">
+								<h3 class="card__title"><a href="#">{{ show.title.value }}</a></h3>
+								
+								<span class="card__category">
 
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-									<span class="card__category">
-										<a href="#">Action</a>
-										<a href="#">Triler</a>
-									</span>
+										<a href="#">{{ show.genres.value }}</a>
 
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
-									</div>
-								</div>
+								<span class="card__rate"><i class="icon ion-ios-star"></i> {{ show.rating.value }} </span>
 							</div>
 						</div>
 					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/img/covers/cover2.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">Benched</a></h3>
-									<span class="card__category">
-										<a href="#">Comedy</a>
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>7.1</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/img/covers/cover3.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">Whitney</a></h3>
-									<span class="card__category">
-										<a href="#">Romance</a>
-										<a href="#">Drama</a>
-										<a href="#">Music</a>
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>6.3</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/img/covers/cover4.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-									<span class="card__category">
-										<a href="#">Comedy</a>
-										<a href="#">Drama</a>
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>7.9</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/img/covers/cover5.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-									<span class="card__category">
-										<a href="#">Action</a>
-										<a href="#">Triler</a>
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-12 col-lg-6">
-					<div class="card card--list">
-						<div class="row">
-							<div class="col-12 col-sm-4">
-								<div class="card__cover">
-									<img src="../static/img/covers/cover6.jpg" alt="">
-									<a href="#" class="card__play">
-										<i class="icon ion-ios-play"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="col-12 col-sm-8">
-								<div class="card__content">
-									<h3 class="card__title"><a href="#">Benched</a></h3>
-									<span class="card__category">
-										<a href="#">Comedy</a>
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>7.1</span>
-
-										<ul class="card__list">
-											<li>HD</li>
-											<li>16+</li>
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
+					<!-- end card -->
+				{% endfor %}
 
 				<!-- paginator -->
 				<div class="col-12">
-					<ul class="paginator paginator--list">
+					<ul class="paginator">
 						<li class="paginator__item paginator__item--prev">
 							<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
 						</li>

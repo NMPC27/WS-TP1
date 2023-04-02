@@ -24,5 +24,11 @@ urlpatterns = [
     path('movies', views.movies, name='movies'),
     path('tvshows', views.tvshows, name='tvshows'),
     path('about', views.about, name='about'),
+    path('insert', views.insert, name='insert'),
+    path('filter', views.filter, name='filter'),
     path('admin/', admin.site.urls),
+    
+    
+    #catch all
+    path('<path:unknown>', views.not_found, name='not_found')
 ]

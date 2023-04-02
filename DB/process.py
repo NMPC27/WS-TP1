@@ -94,7 +94,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         country = row['country']
         date_added = row['date_added']
         release_year = row['release_year']
-        rating = row['rating']
+        # rating = row['rating']
         duration = row['duration']
         listed_in = row['listed_in']
         description = row['description']
@@ -171,11 +171,11 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         release_year_literal = f'"{release_year}"'
         triples += f'{show_uri} <http://netflixUA.org/release_year> {release_year_literal} . \n'
 
-        # Create (rating)
-        if rating == "":
-            rating = "UNKNOWN"
-        rating_literal = f'"{rating}"'
-        triples += f'{show_uri} <http://netflixUA.org/rating> {rating_literal} . \n'
+        # # Create (rating)
+        # if rating == "":
+        #     rating = "UNKNOWN"
+        # rating_literal = f'"{rating}"'
+        # triples += f'{show_uri} <http://netflixUA.org/rating> {rating_literal} . \n'
 
         # Create (duration)
         if duration == "":
@@ -229,8 +229,12 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         with open("TVshow_img.csv", "r", encoding="utf-8") as f2:
             #copy everything from TVshow_img.csv to netflix_triples.nt
             f.write(f2.read())
+        with open("ratings.csv", "r", encoding="utf-8") as f3:
+            #copy everything from ratings.csv to netflix_triples.nt
+            f.write(f3.read())
         
 
         f.close()
         f1.close()
         f2.close()
+        f3.close()
