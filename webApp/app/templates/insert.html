@@ -139,43 +139,113 @@
     <!-- end header search -->
 </header>
 <!-- end header -->
+<section class="content"style="padding-top: 90px;">
+    <div class="content__head" style="margin-bottom: 0px;">
+        <div class="container"style="padding-top: 4vh;padding-bottom: 5vh;" >
+            <div class="row">
+                <h1 class="home__title" style="padding-bottom: 3vh;"><b>Insert</b> Data</h1>
+            </div>
+            <div class="row" style="display: flex; justify-content: center;">
+                <button class="filter__btn" id="insert-btn" style = "margin: 0 1rem;">Insert</button>
+                <button class="filter__btn" id="remove-btn"style = "margin: 0 1rem;">Remove</button>
+                <button class="filter__btn "id="data-btn"style = "margin: 0 1rem;">Edit Data</button>
+            </div>
 
-<div class="content__head"></div>
-<div class="container" style="padding-top: 15vh;">
-    <div class="row">
-        <h1 class="home__title" style="padding-bottom: 5vh;"><b>Insert</b> Data</h1>
-    </div>
-    <div class="row" style="display: flex; justify-content: center;">
-        <button class="filter__btn" id="insert-btn" style = "margin: 0 1rem;">Insert</button>
-        <button class="filter__btn" id="remove-btn"style = "margin: 0 1rem;">Remove</button>
-        <button class="filter__btn "id="data-btn"style = "margin: 0 1rem;">Edit Data</button>
-    </div>
-    <div class="row" >
-        <div id="insert-div" class="hidden">
-            <form>
-                <label for="insert-input">Insert Data:</label>
-                <input type="text" id="insert-input" name="insert-input"><br><br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-        <div id="remove-div" class="hidden">
-            <form>
-                <label for="remove-input">Remove Data:</label>
-                <input type="text" id="remove-input" name="remove-input"><br><br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-        <div id="data-div" class="hidden">
-            <form>
-                <label for="data-input">Data:</label>
-                <input type="text" id="data-input" name="data-input"><br><br>
-                <input type="submit" value="Submit">
-            </form>
         </div>
     </div>
-</div>
+    <div class="content__head">
+        <div class="container">
+            <div class="row" style="padding-top: 5vh;padding-bottom: 5vh;" > 
+                    <div id="insert-div" class="hidden">
+                        <div class="row justify-content-end" style="display: flex;">
+                            <div class="col-md-6">
+                                <h1 class="home__title" style="padding-bottom: 3vh;">Insert</h1>
+                                <form>
+                                    <label for="insert-input-title">
+                                        <h3 class="section__text">Title</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-title" name="insert-input-title">
+                        
+                                    <label for="insert-input-type">
+                                        <h3 class="section__text">Type</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-type" name="insert-input-type">
+                        
+                                    <label for="insert-input-img">
+                                        <h3 class="section__text">Image</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-img" name="insert-input-img">
+                        
+                                    <label for="insert-input-genres">
+                                        <h3 class="section__text">Genres</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-genres" name="insert-genres">
 
+                                    <label for="insert-input-countries">
+                                        <h3 class="section__text">Countries</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-countries" name="insert-input-countries">
+                        
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="home__title" style="padding-bottom: 3vh;">‎</h1>
+                                <form>
+                                    <label for="insert-input-desc">
+                                        <h3 class="section__text">Title</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-desc" name="insert-input-desc">
+                        
+                                    <label for="insert-input-release_year">
+                                        <h3 class="section__text">Release Year</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-release_year" name="insert-input-release_year">
+                        
+                                    <label for="insert-input-date_add">
+                                        <h3 class="section__text">Added Date</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-date_add" name="insert-input-date_add">
+                        
+                                    <label for="insert-input-director_name">
+                                        <h3 class="section__text">Director Name</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-director_name" name="insert-director_name">
 
+                                    <label for="insert-input-cast">
+                                        <h3 class="section__text">Cast</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-cast" name="insert-input-cast">
+                                    
+                                    <br>
+                                    <div class="d-flex justify-content-end">
+                                        <input type="submit" class="form__btn" value="Submit">
+                                      </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="remove-div" class="hidden">
+                    <h1 class="home__title" style="padding-bottom: 3vh;">Remove</h1>
+                    <form>
+                        <label for="remove-input">Remove Data:</label>
+                        <input type="text" id="remove-input" name="remove-input"><br><br>
+                        <input type="submit" class="filter__btn "value="Submit">
+                    </form>
+                </div>
+                <div id="data-div" class="hidden">
+                    <h1 class="home__title" style="padding-bottom: 3vh;">Edit</h1>
+                    <form>
+                        <label for="data-input">Data:</label>
+                        <input type="text" id="data-input" name="data-input"><br><br>
+                        <input type="submit" class="filter__btn " value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <style>
     div {
         /* border: 2px solid black; */

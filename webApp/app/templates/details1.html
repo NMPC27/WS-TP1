@@ -195,7 +195,7 @@
 													{% endif %}
 												</span>
 												{% for genre in dic.genres.value|split:', ' %}
-													<a href="/search?genre={{ genre }}">{{ genre }}</a>{% if not loop.last %} {% endif %}
+													<a href="/filter?genre={{ genre }}">{{ genre }}</a>{% if not loop.last %} {% endif %}
 												{% endfor %}
 											</li>
 										{% comment %} <li><span>Genre:</span> <a href="#">{{dic.genres.value}}</a></li> {% endcomment %}

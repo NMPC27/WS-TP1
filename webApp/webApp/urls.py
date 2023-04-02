@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic.base import RedirectView
+
 
 from app import views
 
@@ -25,10 +27,9 @@ urlpatterns = [
     path('tvshows', views.tvshows, name='tvshows'),
     path('about', views.about, name='about'),
     path('insert', views.insert, name='insert'),
+    
+    path('filter/', RedirectView.as_view(url='/filter/', query_string=True)),
     path('filter', views.filter, name='filter'),
+    
     path('admin/', admin.site.urls),
-    
-    
-    #catch all
-    path('<path:unknown>', views.not_found, name='not_found')
 ]

@@ -2767,7 +2767,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 .form__textarea {
   border: none;
-  height: 150px;
   position: relative;
   color: #fff;
   font-size: 15px;

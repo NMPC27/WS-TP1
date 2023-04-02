@@ -43,7 +43,7 @@
 					<div class="col-12">
 						<div class="header__content">
 							<!-- header logo -->
-							<a href="index.html" class="header__logo">
+							<a href="/" class="header__logo">
 								<img src="../static/img/logo.svg" alt="">
 							</a>
 							<!-- end header logo -->
@@ -164,11 +164,11 @@
 									<span class="card__category">
 										<div>
 										{% for genre in show.genres.value|split:", " %}
-											<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+											<a href="/filter?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 										{%endfor%}
 										</div>
 								</div>
-								<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
+								<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/filter?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
 							</div>
 							<!-- end card -->
 						</div>
@@ -257,11 +257,11 @@
 										<span class="card__category">
 											<div>
 											{% for genre in show.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/filter?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>
-									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
+									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/filter?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
 								</div>
 							</div>
 							<!-- end card -->
@@ -292,11 +292,11 @@
 										<span class="card__category">
 											<div>
 											{% for genre in movie.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/filter?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>
-									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{movie.rating.value}}" style="color:white"> {{ movie.rating.value }}</a> </span>
+									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/filter?rating={{movie.rating.value}}" style="color:white"> {{ movie.rating.value }}</a> </span>
 								</div>
 							</div>
 							<!-- end card -->
@@ -328,11 +328,11 @@
 										<span class="card__category">
 											<div>
 											{% for genre in tvshow.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/filter?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>
-									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{tvshow.rating.value}}" style="color:white"> {{ tvshow.rating.value }}</a> </span>
+									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/filter?rating={{tvshow.rating.value}}" style="color:white"> {{ tvshow.rating.value }}</a> </span>
 								</div>
 							</div>
 							<!-- end card -->
