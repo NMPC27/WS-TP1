@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load custom_filters %}
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,7 +43,7 @@
 					<div class="col-12">
 						<div class="header__content">
 							<!-- header logo -->
-							<a href="index.html" class="header__logo">
+							<a href="/" class="header__logo">
 								<img src="../static/img/logo.svg" alt="">
 							</a>
 							<!-- end header logo -->
@@ -169,20 +169,25 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<form action="/filter" method="get">
+					<form action="/search" method="get">
+						{% if movies == 1 %} 
+							<input hidden value="1" id="movies" name="movies">
+						{% else %}
+							<input hidden value="0" id="movies" name="movies">
+						{% endif %}
+						
 					<div class="filter__content">
 						<div class="filter__items">
-							
 							<!-- filter item -->
-							<div class="filter__item" id="filter_genre">
+							<div class="filter__item" id="genre">
 								<span class="filter__item-label">GENRE:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="All" id="filter_genre" name="filter_genre">
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input value="All" id="genre" name="genre" style="width: 9.5vw;">
 									<span></span>
 								</div>
 
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_genre">
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="genre">
 									<li>All<li>
 									<li>Action & Adventure</li>
 									<li>Anime</li>
@@ -214,15 +219,15 @@
 							<!-- end filter item -->
 
 							<!-- filter item -->
-							<div class="filter__item" id="filter_year">
+							<div class="filter__item" id="release_year">
 								<span class="filter__item-label">RELEASE YEAR:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="All">
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="release_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input value="All" id="release_year" name="release_year" style="width: 5vw;">
 									<span></span>
 								</div>
 
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_year">
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="release_year">
 									<li>All</li>
 									<li>2021</li>
 									<li>2020</li>
@@ -241,15 +246,15 @@
 							<!-- end filter item -->
 
 							<!-- filter item -->
-							<div class="filter__item" id="filter_country">
+							<div class="filter__item" id="filter_">
 								<span class="filter__item-label">COUNTRY:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_country" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="All" id="filter_country">
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input value="All" id="filter_" name="filter_" style="width: 10.5vw;">
 									<span></span>
 								</div>
 
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_country">
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_">
 									<li>All</li>
 									<li>Afghanistan</li>
 									<li>Albania</li>
@@ -378,15 +383,15 @@
 							<!-- end filter item -->
 
 							<!-- filter item -->
-							<div class="filter__item" id="filter_rate">
+							<div class="filter__item" id="rating">
 								<span class="filter__item-label">RATING:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input type="button" value="All">
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="rating" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input value="All" id="rating" name="rating" style="width: 2.5vw;">
 									<span></span>
 								</div>
 
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter_rate">
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="rating">
 									<li>All</li>
 									<li>9-10</li>
 									<li>8-9</li>
@@ -406,7 +411,6 @@
 						<!-- filter btn -->
 						<button class="filter__btn" type="submit">apply filter</button>
 						<!-- end filter btn -->
-						
 					</div>
 				</div>
 			</form>
@@ -434,11 +438,15 @@
 								</a>
 							</div>
 							<div class="card__content">
-								<h3 class="card__title"><a href="#">{{ show.title.value }}</a></h3>
+								<h3 class="card__title"><a href="/details/{{show.title_id.value}}">{{ show.title.value }}</a></h3>
 								
 								<span class="card__category">
 
-										<a href="#">{{ show.genres.value }}</a>
+									<div>
+									{% for genre in show.genres.value|split:", " %}
+										<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+									{%endfor%}
+									</div>
 
 								<span class="card__rate"><i class="icon ion-ios-star"></i> {{ show.rating.value }} </span>
 							</div>
@@ -468,202 +476,12 @@
 	</div>
 	<!-- end catalog -->
 
-	<!-- expected premiere -->
-	<section class="section section--bg" data-bg="img/section/section.jpg">
-		<div class="container">
-			<div class="row">
-				<!-- section title -->
-				<div class="col-12">
-					<h2 class="section__title">Expected premiere</h2>
-				</div>
-				<!-- end section title -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-							<span class="card__category">
-								<a href="#">Action</a>
-								<a href="#">Triler</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover3.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">Benched</a></h3>
-							<span class="card__category">
-								<a href="#">Comedy</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>7.1</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover2.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">Whitney</a></h3>
-							<span class="card__category">
-								<a href="#">Romance</a>
-								<a href="#">Drama</a>
-								<a href="#">Music</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>6.3</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover6.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-							<span class="card__category">
-								<a href="#">Comedy</a>
-								<a href="#">Drama</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>7.9</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover4.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-							<span class="card__category">
-								<a href="#">Action</a>
-								<a href="#">Triler</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- card -->
-				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-					<div class="card">
-						<div class="card__cover">
-							<img src="../static/img/covers/cover5.jpg" alt="">
-							<a href="#" class="card__play">
-								<i class="icon ion-ios-play"></i>
-							</a>
-						</div>
-						<div class="card__content">
-							<h3 class="card__title"><a href="#">Benched</a></h3>
-							<span class="card__category">
-								<a href="#">Comedy</a>
-							</span>
-							<span class="card__rate"><i class="icon ion-ios-star"></i>7.1</span>
-						</div>
-					</div>
-				</div>
-				<!-- end card -->
-
-				<!-- section btn -->
-				<div class="col-12">
-					<a href="#" class="section__btn">Show more</a>
-				</div>
-				<!-- end section btn -->
-			</div>
-		</div>
-	</section>
-	<!-- end expected premiere -->
 
 	<!-- footer -->
 	<footer class="footer">
 		<div class="container">
 			<div class="row">
-				<!-- footer list -->
-				<div class="col-12 col-md-3">
-					<h6 class="footer__title">Download Our App</h6>
-					<ul class="footer__app">
-						<li><a href="#"><img src="../static/img/Download_on_the_App_Store_Badge.svg" alt=""></a></li>
-						<li><a href="#"><img src="../static/img/google-play-badge.png" alt=""></a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-6 col-sm-4 col-md-3">
-					<h6 class="footer__title">Resources</h6>
-					<ul class="footer__list">
-						<li><a href="#">About Us</a></li>
-						<li><a href="#">Pricing Plan</a></li>
-						<li><a href="#">Help</a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-6 col-sm-4 col-md-3">
-					<h6 class="footer__title">Legal</h6>
-					<ul class="footer__list">
-						<li><a href="#">Terms of Use</a></li>
-						<li><a href="#">Privacy Policy</a></li>
-						<li><a href="#">Security</a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-12 col-sm-4 col-md-3">
-					<h6 class="footer__title">Contact</h6>
-					<ul class="footer__list">
-						<li><a href="tel:+18002345678">+1 (800) 234-5678</a></li>
-						<li><a href="mailto:support@moviego.com">support@flixgo.com</a></li>
-					</ul>
-					<ul class="footer__social">
-						<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
-						<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
-						<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
-						<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
+				
 
 				<!-- footer copyright -->
 				<div class="col-12">

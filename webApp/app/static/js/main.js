@@ -132,6 +132,7 @@ $(document).ready(function () {
 	});
 
 	$('.filter__item-menu li').on('click', function() {
+		// console.log($(this).text());
 		var text = $(this).text();
 		var item = $(this);
 		var id = item.closest('.filter__item').attr('id');

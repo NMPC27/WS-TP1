@@ -117,7 +117,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         director_split = director.split(",")
         for direct in director_split:
             dir = direct.strip().replace('"','').replace(" ","_").replace(".","")
-            director_uri = f'<http://netflixUA.org/director/{dir.lower()}>'
+            director_uri = f'<http://netflixUA.org/person/{dir.lower()}>'
             triples += f'{show_uri} <http://netflixUA.org/director> {director_uri} . \n'
             if dir not in once:
                 triples += f'{director_uri} <http://netflixUA.org/name> "{dir.replace("_"," ")}" .\n'
@@ -131,7 +131,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         for c in cast_split:
             c = c.strip().replace('"','').replace(" ","_").replace(".","")
             
-            cast_uri = f'<http://netflixUA.org/cast/{c.strip().replace(" ","_").lower()}>'
+            cast_uri = f'<http://netflixUA.org/person/{c.strip().replace(" ","_").lower()}>'
             triples += f'{show_uri} <http://netflixUA.org/cast> {cast_uri} . \n'
             if c not in once:
                 triples += f'{cast_uri} <http://netflixUA.org/name> "{c.strip().replace("_"," ")}" .\n'
@@ -190,7 +190,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         for l in listed_in_split:
             l = genreDict[l.strip()]
             if l == "":
-                continue
+                l="UNKNOWN"
             
             l = l.strip().replace('"','').replace(" ","_").replace(".","")
 
@@ -213,7 +213,7 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         description_literal = f'"{desc}"'
         triples += f'{show_uri} <http://netflixUA.org/description> {description_literal} . \n'
 
-        print(show_id)
+        print(show_id, end = "\r")
             
         all_triples += triples
 

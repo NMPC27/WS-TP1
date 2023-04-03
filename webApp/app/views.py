@@ -30,12 +30,11 @@ def details(requests, id): # str id
     return render(requests, 'details1.html', dic)
 
 def movies(requests):
+    shows= select_all_12()
 
-    shows= select_all_movies_12()
-
-    args ={
+    args = {
+        'shows': shows,
         'movies': 1,
-        'shows': shows
     }
 
     return render(requests, 'catalog1.html',args)
@@ -43,37 +42,57 @@ def movies(requests):
 def tvshows(requests):
     shows= select_all_TVshow_12()
 
-    args ={
+    args = {
+        'shows': shows,
         'movies': 0,
-        'shows': shows
     }
 
     return render(requests, 'catalog1.html',args)
 
-def filter(requests):
+def search(requests): # pesquisa por pessoas e nomes de filmes/series
+    shows= select_all_TVshow_12()
+
     
-    if requests.method == 'GET':
-        queryargs = {k:requests.GET[k] for k in requests.GET.keys()}
-        print(queryargs)
+    if len(requests.GET.keys())!=0:
+        #this is a search
+        queryargs = {k:requests.GET[k] for k in requests.GET.keys() if requests.GET[k]!="All" and requests.GET[k]!=""}
+        queryargs['limit'] = 12
+        shows= searchQuery(queryargs)
+        args = {
+            'shows': shows,
+            "search_query": requests.GET['search_query'] if requests.GET.get('search_query') else "All",
+            'filter_genre': requests.GET.get('genre') if requests.GET.get('genre') else "All",
+            "filter_year": requests.GET.get('release_year') if requests.GET.get('release_year') else "All",
+            "filter_country": requests.GET.get('country') if requests.GET.get('country') else "All",
+            "rating": requests.GET.get('rating') if requests.GET.get('rating') else "All",
+            'type': "All"
+        }
+            
+            
 
-    shows= select_all_12()
-
+        #query
+        return render(requests, 'search.html',args)
+    #this is not a search
     args = {
-        'shows': shows,
-        'filter_genre': "ola",
-        'filter_year': 2727,
-        'filter_country': "pp",
-        'filter_rate': "0-1",
+        'shows': select_all_12(),
+        'search_query': "",
+        'filter_genre': "All",
+        'filter_year': "All",
+        'filter_country': "All" ,
+        'rating': "All",
+        'type': "All"
     }
-
-
-    return render(requests, 'catalog_filter.html',args)
+    
+    return render(requests, 'search.html', args)
 
 def about(requests):
     return render(requests, 'about.html')
 
 def insert(requests):
     return render(requests, 'insert.html')
+
+def test_site(requests):
+    return render(requests, 'test_site.html')
 
 def not_found(request):
     return render(request, '404.html')

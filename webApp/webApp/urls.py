@@ -28,8 +28,8 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('insert', views.insert, name='insert'),
     
-    path('filter/', RedirectView.as_view(url='/filter/', query_string=True)),
-    path('filter', views.filter, name='filter'),
+    # path('search/', RedirectView.as_view(url='/search/', query_string=True)),
+    path('search', views.search, name='search'),
     
     path('admin/', admin.site.urls),
 ]

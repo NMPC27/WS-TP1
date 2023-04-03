@@ -14,3 +14,5 @@ TODO:
 -muitos filtros
 -clicables
 -create/update/delete coisas
+
+-> aparecer cast em details
