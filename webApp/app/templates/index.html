@@ -56,11 +56,11 @@
 								</li>
 
 								<li class="header__nav-item">
-									<a href="/movies" class="header__nav-link">Movies</a>
+									<a href="/movies/1" class="header__nav-link">Movies</a>
 								</li>
 
 								<li class="header__nav-item">
-									<a href="/tvshows" class="header__nav-link">TV Shows</a>
+									<a href="/tvshows/1" class="header__nav-link">TV Shows</a>
 								</li>
 
 								<li class="header__nav-item">
@@ -149,12 +149,12 @@
 							<!-- card -->
 							<div class="card card--big">
 								<div class="card__cover">
-									{% if show.img.value != "NO_IMAGE" %}
+										{% if show.img.value != "NO_IMAGE" %}
 											<img src="{{ show.img.value }}" alt="" style ="height:42vh">
 									  	{% else %}
 											<img src="../static/img/NO_IMAGE.jpg" alt="Image not found"style ="height:42vh" >
 									  	{% endif %}
-									<a href="#" class="card__play">
+									<a href="/details/{{show.title_id.value}}" class="card__play">
 										<i class="icon ion-ios-play"></i>
 									</a>
 								</div>
@@ -164,7 +164,7 @@
 									<span class="card__category">
 										<div>
 										{% for genre in show.genres.value|split:", " %}
-											<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+											<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 										{%endfor%}
 										</div>
 								</div>
@@ -257,7 +257,7 @@
 										<span class="card__category">
 											<div>
 											{% for genre in show.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>
@@ -292,7 +292,7 @@
 										<span class="card__category">
 											<div>
 											{% for genre in movie.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>
@@ -328,7 +328,7 @@
 										<span class="card__category">
 											<div>
 											{% for genre in tvshow.genres.value|split:", " %}
-												<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
 									</div>

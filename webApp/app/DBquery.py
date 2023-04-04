@@ -412,5 +412,14 @@ def deleteByTitle(title):
     return res['results']['bindings']
 
 
+# def searchByTitleOrPerson(input):
+#     query = """
+#         PREFIX mov:<http://netflixUA.org/>
+        
+#         """
+    
+#     payload_query = {"query": query}
+#     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
+#     res = json.loads(res)
 
-
+#     return res['results']['bindings']

@@ -129,7 +129,7 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input type="text" placeholder="Search for a movie, TV Series that you are looking for">
+							<input readonly="readonly" type="text" placeholder="Search for a movie, TV Series that you are looking for">
 
 							<button type="button">search</button>
 						</div>
@@ -177,7 +177,7 @@
 								<span class="filter__item-label">GENRE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input value={{ filter_genre }} id="filter_genre" name="genre" style="width: 9.5vw;">
+									<input readonly="readonly" value={{ filter_genre }} id="filter_genre" name="genre" style="width: 9.5vw;">
 									<span></span>
 								</div>
 
@@ -217,7 +217,7 @@
 								<span class="filter__item-label">RELEASE YEAR:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input value={{ filter_year }} id="filter_year" name="release_year" style="width: 5vw;">
+									<input readonly="readonly" value={{ filter_year }} id="filter_year" name="release_year" style="width: 5vw;">
 									<span></span>
 								</div>
 
@@ -244,7 +244,7 @@
 								<span class="filter__item-label">COUNTRY:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_country" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input value={{ filter_country }} id="filter_country" name="country" style="width: 10.5vw;">
+									<input readonly="readonly" value={{ filter_country }} id="filter_country" name="country" style="width: 10.5vw;">
 									<span></span>
 								</div>
 
@@ -381,7 +381,7 @@
 								<span class="filter__item-label">RATING:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="rating" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input value={{ rating }} id="rating" name="rating" style="width: 2.5vw;">
+									<input readonly="readonly" value={{ rating }} id="rating" name="rating" style="width: 2.5vw;">
 									<span></span>
 								</div>
 
@@ -407,7 +407,7 @@
 								<span class="filter__item-label">TYPE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input value={{ type }} id="type" name="type" style="width: 4.5vw;">
+									<input readonly="readonly" value={{ type }} id="type" name="type" style="width: 4.5vw;">
 									<span></span>
 								</div>
 
@@ -457,7 +457,7 @@
 
 									<div>
 									{% for genre in show.genres.value|split:", " %}
-										<a href="/search?genre={{genre}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
+										<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 									{%endfor%}
 									</div>
 

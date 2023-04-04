@@ -15,4 +15,4 @@ TODO:
 -clicables
 -create/update/delete coisas
 
--> aparecer cast em details
+-> aparecer cast e reting em details

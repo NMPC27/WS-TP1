@@ -29,22 +29,24 @@ def details(requests, id): # str id
     
     return render(requests, 'details1.html', dic)
 
-def movies(requests):
+def movies(requests,page):
     shows= select_all_12()
 
     args = {
         'shows': shows,
         'movies': 1,
+        'page':page
     }
 
     return render(requests, 'catalog1.html',args)
 
-def tvshows(requests):
+def tvshows(requests,page):
     shows= select_all_TVshow_12()
 
     args = {
         'shows': shows,
         'movies': 0,
+        'page':page
     }
 
     return render(requests, 'catalog1.html',args)
@@ -54,7 +56,9 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
 
     
     if len(requests.GET.keys())!=0:
-        #this is a search
+        #this is a searchç
+        
+        print(requests.GET)
         queryargs = {k:requests.GET[k] for k in requests.GET.keys() if requests.GET[k]!="All" and requests.GET[k]!=""}
         queryargs['limit'] = 12
         shows= searchQuery(queryargs)
@@ -67,8 +71,6 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
             "rating": requests.GET.get('rating') if requests.GET.get('rating') else "All",
             'type': "All"
         }
-            
-            
 
         #query
         return render(requests, 'search.html',args)

@@ -23,8 +23,8 @@ from app import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('details/<str:id>', views.details, name='details'),
-    path('movies', views.movies, name='movies'),
-    path('tvshows', views.tvshows, name='tvshows'),
+    path('movies/<int:page>', views.movies, name='movies'),
+    path('tvshows/<int:page>', views.tvshows, name='tvshows'),
     path('about', views.about, name='about'),
     path('insert', views.insert, name='insert'),
     
