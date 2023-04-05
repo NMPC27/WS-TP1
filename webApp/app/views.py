@@ -1,6 +1,7 @@
 from django.shortcuts import render
 #import file DBquery
 from app.DBquery import *
+from pprint import pprint
 #from jinja2 import Environment, FileSystemLoader
 
 def index(request):
@@ -25,6 +26,7 @@ def details(requests, id): # str id
     dic = get_showById(id)
     #pass dic to dictionary
     dic = {'dic': dic[0]}
+    pprint(dic)
 
     
     return render(requests, 'details1.html', dic)
@@ -69,7 +71,8 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
             "filter_year": requests.GET.get('release_year') if requests.GET.get('release_year') else "All",
             "filter_country": requests.GET.get('country') if requests.GET.get('country') else "All",
             "rating": requests.GET.get('rating') if requests.GET.get('rating') else "All",
-            'type': "All"
+            'type': "All",
+            'page': requests.GET.get('page') if requests.GET.get('rating') else "1"
         }
 
         #query
@@ -82,7 +85,8 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
         'filter_year': "All",
         'filter_country': "All" ,
         'rating': "All",
-        'type': "All"
+        'type': "All",
+        'page': "1"
     }
     
     return render(requests, 'search.html', args)

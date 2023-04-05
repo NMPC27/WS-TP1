@@ -78,6 +78,8 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         "Movies" : "", #! se estragar mudar
         "Stand-Up Comedy & Talk Shows" : "Comedy",
         "Classic & Cult TV" : "", #! se estragar mudar
+        
+        "UNKNOWN" : "UNKNOWN"
     }
     
     
@@ -171,11 +173,6 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         release_year_literal = f'"{release_year}"'
         triples += f'{show_uri} <http://netflixUA.org/release_year> {release_year_literal} . \n'
 
-        # # Create (rating)
-        # if rating == "":
-        #     rating = "UNKNOWN"
-        # rating_literal = f'"{rating}"'
-        # triples += f'{show_uri} <http://netflixUA.org/rating> {rating_literal} . \n'
 
         # Create (duration)
         if duration == "":
@@ -187,10 +184,12 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         if listed_in == "":
             listed_in = "UNKNOWN"
         listed_in_split = listed_in.split(",")
+        if all(genreDict[x.strip()] == "" for x in listed_in_split):
+            listed_in_split = ["UNKNOWN"]
         for l in listed_in_split:
             l = genreDict[l.strip()]
-            if l == "":
-                l="UNKNOWN"
+            if l == "" :
+                continue
             
             l = l.strip().replace('"','').replace(" ","_").replace(".","")
 
@@ -223,10 +222,10 @@ with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         f.write(all_triples)
         
         #open movies_img.csv and TVshow_img.csv
-        with open("movies_img.csv", "r", encoding="utf-8") as f1:
+        with open("images.csv", "r", encoding="utf-8") as f1:
             #copy everything from movies_img.csv to netflix_triples.nt
             f.write(f1.read())
-        with open("TVshow_img.csv", "r", encoding="utf-8") as f2:
+        with open("trailers.csv", "r", encoding="utf-8") as f2:
             #copy everything from TVshow_img.csv to netflix_triples.nt
             f.write(f2.read())
         with open("ratings.csv", "r", encoding="utf-8") as f3:

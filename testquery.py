@@ -51,19 +51,19 @@ def select_all_12():
 
 
 
-#print(select_all_12()) to file:
-with open('test.json', 'w') as outfile:
-    res = {}
-    for e in select_all_12():
-        e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
+# #print(select_all_12()) to file:
+# with open('test.json', 'w') as outfile:
+#     res = {}
+#     for e in select_all_12():
+#         e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
         
-        if not e.get('type'):
-            print(e)
-            exit(1)
-        res[e['title']['value']] = {"id": e['title_id']['value'], "type": e['type']['value']}
+#         if not e.get('type'):
+#             print(e)
+#             exit(1)
+#         res[e['title']['value']] = {"id": e['title_id']['value'], "type": e['type']['value']}
     
-    json.dump(res, outfile)   
-    exit()
+#     json.dump(res, outfile)   
+#     exit()
 
     
 def select_all_movies_12():
@@ -219,17 +219,26 @@ def select_search(name):
     #     print("-----------------")
     return res['results']['bindings']
         
-# select_search("King Jack")
 def searchQuery(argsdict):
-
+    
+    input = argsdict.get('search_query')
+    title = argsdict.get('title')
+    type = argsdict.get('type')
+    genre = argsdict.get('genre')
+    country = argsdict.get('country')
+    director = argsdict.get('director')
+    actor = argsdict.get('actor')
+    release_year = argsdict.get('release_year')
+    
     query = """
         PREFIX mov:<http://netflixUA.org/>
         
         SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)
         WHERE {
+            {
             ?title_id mov:title ?title .
             
-            OPTIONAL{?title_id mov:type ?type .
+            ?title_id mov:type ?type .
             ?title_id mov:rating ?rating .
             ?title_id mov:director ?director .
             ?director mov:name ?director_name .
@@ -243,24 +252,107 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
     		?title_id mov:cast ?person .
     		?person mov:name ?cast_person .
-      }
-            """
             
-    title = argsdict.get('title')
-    type = argsdict.get('type')
-    genre = argsdict.get('genre')
-    country = argsdict.get('country')
-    director = argsdict.get('director')
-    actor = argsdict.get('actor')
-    release_year = argsdict.get('release_year')
-    
+            """
+    if input != None:
+        query += "FILTER(REGEX(?title, \""+input+"\", \"i\")) \n"
     if title != None:
         query += "?title_id mov:title \""+title+"\" .\n"
     if type != None:
         query += "?title_id mov:type \""+type+"\" .\n"
     if genre != None:
-        query += "?title_id mov:listed_in ?listed_in .\n"
-        query += "?listed_in mov:name \""+genre+"\" .\n"
+        query += "?title_id mov:listed_in ?listed_inn .\n"
+        query += "?listed_inn mov:name \""+genre+"\" .\n"
+    if country != None:
+        query += "?title_id mov:country ?countrys .\n"
+        query += "?countrys mov:name \""+country+"\" .\n"
+    if director != None:
+        query += "?title_id mov:director ?director .\n"
+        query += "?director mov:name \""+director+"\" .\n"
+    if actor != None:
+        query += "?title_id mov:cast ?person .\n"
+        query += "?person mov:name \""+actor+"\" .\n"
+    if release_year != None:
+        query += "?title_id mov:release_year \""+release_year+"\" .\n"
+    # if date_added != None:
+    #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
+        
+    query += """
+    }
+        UNION
+            {
+            ?title_id mov:title ?title .
+            
+            ?title_id mov:type ?type .
+            ?title_id mov:rating ?rating .
+            ?title_id mov:director ?director .
+            ?director mov:name ?director_name .
+            ?title_id mov:img ?img .
+            ?title_id mov:listed_in ?listed_in .
+            ?listed_in mov:name ?genre .
+            ?title_id mov:country ?countrys .
+            ?countrys mov:name ?country .
+            ?title_id mov:description ?desc .
+            ?title_id mov:release_year ?release_year .
+            ?title_id mov:date_added ?date_add . 
+            ?title_id mov:cast ?person .
+            ?person mov:name ?cast_person .
+
+            """
+    if input != None:
+        query += "FILTER(REGEX(?director, \""+input+"\", \"i\")) \n"
+        
+    if title != None:
+        query += "?title_id mov:title \""+title+"\" .\n"
+    if type != None:
+        query += "?title_id mov:type \""+type+"\" .\n"
+    if genre != None:
+        query += "?title_id mov:listed_in ?listed_inn .\n"
+        query += "?listed_inn mov:name \""+genre+"\" .\n"
+    if country != None:
+        query += "?title_id mov:country ?countrys .\n"
+        query += "?countrys mov:name \""+country+"\" .\n"
+    if director != None:
+        query += "?title_id mov:director ?director .\n"
+        query += "?director mov:name \""+director+"\" .\n"
+    if actor != None:
+        query += "?title_id mov:cast ?person .\n"
+        query += "?person mov:name \""+actor+"\" .\n"
+    if release_year != None:
+        query += "?title_id mov:release_year \""+release_year+"\" .\n"
+    # if date_added != None:
+    #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
+    query += """
+    }
+        UNION
+            {
+            ?title_id mov:title ?title .
+            
+            ?title_id mov:type ?type .
+            ?title_id mov:rating ?rating .
+            ?title_id mov:director ?director .
+            ?director mov:name ?director_name .
+            ?title_id mov:img ?img .
+            ?title_id mov:listed_in ?listed_in .
+            ?listed_in mov:name ?genre .
+            ?title_id mov:country ?countrys .
+            ?countrys mov:name ?country .
+            ?title_id mov:description ?desc .
+            ?title_id mov:release_year ?release_year .
+            ?title_id mov:date_added ?date_add . 
+            ?title_id mov:cast ?person .
+            ?person mov:name ?cast_person .
+
+            """
+    if input != None:
+        query += "FILTER(REGEX(?person, \""+input+"\", \"i\")) \n"
+    if title != None:
+        query += "?title_id mov:title \""+title+"\" .\n"
+    if type != None:
+        query += "?title_id mov:type \""+type+"\" .\n"
+    if genre != None:
+        query += "?title_id mov:listed_in ?listed_inn .\n"
+        query += "?listed_inn mov:name \""+genre+"\" .\n"
     if country != None:
         query += "?title_id mov:country ?countrys .\n"
         query += "?countrys mov:name \""+country+"\" .\n"
@@ -275,25 +367,28 @@ def searchQuery(argsdict):
     # if date_added != None:
     #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
 
-
-
-
     query += """
-        
         }
-        GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
-        """
+    }
+    GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
+    """
     limit = argsdict.get('limit')
     if limit != None:
         query += "LIMIT "+str(limit)
-
+        
     print(query)
+    
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
-    res = json.loads(res)
-    return res['results']['bindings']
+    try:
+        res = json.loads(res)
+    except:
+        return []
+    for e in res['results']['bindings']:
+        e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
+    return res['results']['bindings'] 
 
-searchQuery({'genre':"Anime"})
+searchQuery({'genre':"Anime", 'search_query':"EDENS"})
 
 def getNewTitleId():#!TODO GET A NEW ID FROM DB
     CurrID = 8888

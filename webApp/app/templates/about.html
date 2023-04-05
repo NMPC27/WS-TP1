@@ -50,50 +50,27 @@
 
 							<!-- header nav -->
 							<ul class="header__nav">
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuHome">
-										<li><a href="index.html">Home slideshow bg</a></li>
-										<li><a href="index2.html">Home static bg</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
-
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
-										<li><a href="catalog1.html">Catalog Grid</a></li>
-										<li><a href="catalog2.html">Catalog List</a></li>
-										<li><a href="details1.html">Details Movie</a></li>
-										<li><a href="details2.html">Details TV Series</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
 
 								<li class="header__nav-item">
-									<a href="pricing.html" class="header__nav-link">Pricing Plan</a>
+									<a href="/" class="header__nav-link">Home</a>
 								</li>
 
 								<li class="header__nav-item">
-									<a href="faq.html" class="header__nav-link">Help</a>
+									<a href="/movies/1" class="header__nav-link">Movies</a>
 								</li>
 
-								<!-- dropdown -->
-								<li class="dropdown header__nav-item">
-									<a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-										<li><a href="about.html">About</a></li>
-										<li><a href="signin.html">Sign In</a></li>
-										<li><a href="signup.html">Sign Up</a></li>
-										<li><a href="404.html">404 Page</a></li>
-									</ul>
+								<li class="header__nav-item">
+									<a href="/tvshows/1" class="header__nav-link">TV Shows</a>
 								</li>
-								<!-- end dropdown -->
+
+								<li class="header__nav-item">
+									<a href="/insert" class="header__nav-link">Insert Data</a>
+								</li>
+
+								<li class="header__nav-item">
+									<a href="/about" class="header__nav-link">About</a>
+								</li>
+
 							</ul>
 							<!-- end header nav -->
 
@@ -124,14 +101,14 @@
 		</div>
 
 		<!-- header search -->
-		<form action="#" class="header__search">
+		<form action="/search" class="header__search" method="get">
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input type="text" placeholder="Search for a movie, TV Series that you are looking for">
+							<input name="search_query" placeholder="Search for a movie, TV Series or person that you are looking for">
 
-							<button type="button">search</button>
+							<button type="submit">search</button>
 						</div>
 					</div>
 				</div>
@@ -176,9 +153,13 @@
 
 				<!-- section text -->
 				<div class="col-12">
-					<p class="section__text">It is a long <b>established</b> fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using.</p>
+					<p class="section__text">
+						Welcome to our FLIXGO! We're thrilled to have you here and excited to share with you some of the best movies available today. Whether you're a fan of action, romance, drama, comedy, horror, or any other genre, we've got you covered.
+					</p>
 
-					<p class="section__text section__text--last-with-margin">'Content here, content here', making it look like <a href="#">readable</a> English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+					<p class="section__text section__text--last-with-margin">
+						Our collection of movies is vast and diverse, with something for everyone. From the latest blockbusters to timeless classics, we've curated a selection that's sure to satisfy even the most discerning moviegoer. And with new movies added regularly, you'll always have something to look forward to.
+					</p>
 				</div>
 				<!-- end section text -->
 
@@ -252,7 +233,7 @@
 			<div class="row">
 				<!-- section title -->
 				<div class="col-12">
-					<h2 class="section__title section__title--no-margin">How it works?</h2>
+					<h2 class="section__title section__title--no-margin">TEAM 04</h2>
 				</div>
 				<!-- end section title -->
 

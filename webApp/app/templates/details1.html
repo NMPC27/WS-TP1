@@ -179,7 +179,7 @@
 							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
 								<div class="card__content">
 									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>X</span>
+										<span class="card__rate"><i class="icon ion-ios-star"></i>{{dic.rating.value}}</span>
 
 										<ul class="card__list">
 											<li>HD</li>
@@ -204,13 +204,28 @@
 											</li>
 										{% comment %} <li><span>Genre:</span> <a href="#">{{dic.genres.value}}</a></li> {% endcomment %}
 										<li><span>Release year:</span> {{dic.release_year.value}}</li>
-										<li><span>Country:</span> {{dic.countries.value}}</li>
-										<li><span>Date added:</span> {{dic.date_add.value}}</li>
-										<li><span>Director:</span> {{dic.director_name.value}}</li>
+										<li><span>Country: </span> {{dic.countries.value}}</li>
+										<li><span>Date added: </span> {{dic.date_add.value}}</li>
+										<li><span>Directors: </span>
+											{% for direct in dic.directors.value|split:', ' %}
+												<a href="/search?director={{ direct|urlencode}}">
+													{{ direct }}
+												</a>
+												{% if not loop.last %} {% endif %}
+											{% endfor %}
+										</li>
+										<li><span>Cast:</span> 
+											{% for actor in dic.cast.value|split:', ' %}
+												<a href="/search?actor={{ actor|urlencode}}">
+													{{ actor }}
+												</a>
+												{% if not loop.last %} {% endif %}
+											{% endfor %}
+										</li>
 									</ul>
 
 									<div class="card__description card__description--details">
-										{{dic.desc.value}}
+										Description: {{dic.desc.value}}
 									</div>
 								</div>
 							</div>

@@ -34,6 +34,7 @@
 
 </head>
 <body class="body">
+	<form action="/search" method="get">
 	
 	<!-- header -->
 	<header class="header">
@@ -50,50 +51,27 @@
 
 							<!-- header nav -->
 							<ul class="header__nav">
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuHome">
-										<li><a href="index.html">Home slideshow bg</a></li>
-										<li><a href="index2.html">Home static bg</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
-
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
-										<li><a href="catalog1.html">Catalog Grid</a></li>
-										<li><a href="catalog2.html">Catalog List</a></li>
-										<li><a href="details1.html">Details Movie</a></li>
-										<li><a href="details2.html">Details TV Series</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
 
 								<li class="header__nav-item">
-									<a href="pricing.html" class="header__nav-link">Pricing Plan</a>
+									<a href="/" class="header__nav-link">Home</a>
 								</li>
 
 								<li class="header__nav-item">
-									<a href="faq.html" class="header__nav-link">Help</a>
+									<a href="/movies/1" class="header__nav-link">Movies</a>
 								</li>
 
-								<!-- dropdown -->
-								<li class="dropdown header__nav-item">
-									<a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-										<li><a href="about.html">About</a></li>
-										<li><a href="signin.html">Sign In</a></li>
-										<li><a href="signup.html">Sign Up</a></li>
-										<li><a href="404.html">404 Page</a></li>
-									</ul>
+								<li class="header__nav-item">
+									<a href="/tvshows/1" class="header__nav-link">TV Shows</a>
 								</li>
-								<!-- end dropdown -->
+
+								<li class="header__nav-item">
+									<a href="/insert" class="header__nav-link">Insert Data</a>
+								</li>
+
+								<li class="header__nav-item">
+									<a href="/about" class="header__nav-link">About</a>
+								</li>
+
 							</ul>
 							<!-- end header nav -->
 
@@ -124,19 +102,19 @@
 		</div>
 
 		<!-- header search -->
-		<form action="#" class="header__search">
+		<div class="header__search">
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input readonly="readonly" type="text" placeholder="Search for a movie, TV Series that you are looking for">
+							<input name="search_query" placeholder="Search for a movie, TV Series that you are looking for" value="{{ search_query }}">
 
-							<button type="button">search</button>
+							<button type="submit">search</button>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
 		<!-- end header search -->
 	</header>
 	<!-- end header -->
@@ -169,7 +147,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<form action="/search" method="get">
+					
 					<div class="filter__content">
 						<div class="filter__items">
 							<!-- filter item -->
@@ -177,7 +155,7 @@
 								<span class="filter__item-label">GENRE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value={{ filter_genre }} id="filter_genre" name="genre" style="width: 9.5vw;">
+									<input readonly="readonly" value="{{ filter_genre }}" id="filter_genre" name="genre" style="width: 9.5vw;">
 									<span></span>
 								</div>
 
@@ -217,7 +195,7 @@
 								<span class="filter__item-label">RELEASE YEAR:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value={{ filter_year }} id="filter_year" name="release_year" style="width: 5vw;">
+									<input readonly="readonly" value="{{ filter_year }}" id="filter_year" name="release_year" style="width: 5vw;">
 									<span></span>
 								</div>
 
@@ -244,7 +222,7 @@
 								<span class="filter__item-label">COUNTRY:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_country" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value={{ filter_country }} id="filter_country" name="country" style="width: 10.5vw;">
+									<input readonly="readonly" value="{{ filter_country }}" id="filter_country" name="country" style="width: 10.5vw;">
 									<span></span>
 								</div>
 
@@ -381,7 +359,7 @@
 								<span class="filter__item-label">RATING:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="rating" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value={{ rating }} id="rating" name="rating" style="width: 2.5vw;">
+									<input readonly="readonly" value="{{ rating }}" id="rating" name="rating" style="width: 2.5vw;">
 									<span></span>
 								</div>
 
@@ -426,7 +404,7 @@
 						<!-- end filter btn -->
 					</div>
 				</div>
-			</form>
+			
 			</div>
 		</div>
 	</div>
@@ -468,26 +446,48 @@
 					<!-- end card -->
 				{% endfor %}
 
+
+				<input hidden id='page' name='page' value="{{ page }}">
+				{% if page == "1" %}
 				<!-- paginator -->
 				<div class="col-12">
 					<ul class="paginator">
-						<li class="paginator__item paginator__item--prev">
-							<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
-						</li>
-						<li class="paginator__item"><a href="#">1</a></li>
-						<li class="paginator__item paginator__item--active"><a href="#">2</a></li>
-						<li class="paginator__item"><a href="#">3</a></li>
-						<li class="paginator__item"><a href="#">4</a></li>
+						<li class="paginator__item paginator__item--active"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page }})">{{ page }}</button></a></li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;"onclick="pageChanger({{ page|add:"1" }})" >{{ page|add:"1" }}</button></a></li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"2" }})">{{ page|add:"2" }}</button></a></li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"3" }})">{{ page|add:"3" }}</button></a></li>
 						<li class="paginator__item paginator__item--next">
-							<a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
+							<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"1" }})"><i class="icon ion-ios-arrow-forward"></i></button></a>
 						</li>
 					</ul>
 				</div>
 				<!-- end paginator -->
+				{% elif page != "1" %}
+				<!-- paginator -->
+				<div class="col-12">
+					<ul class="paginator">
+						<li class="paginator__item paginator__item--prev">
+							<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})"><i class="icon ion-ios-arrow-back"></i></button></a>
+						</li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})">{{ page|add:"-1" }}</button></a></li>
+						<li class="paginator__item paginator__item--active"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page }})">{{ page }}</button></a></li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;"onclick="pageChanger({{ page|add:"1" }})" >{{ page|add:"1" }}</button></a></li>
+						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"2" }})">{{ page|add:"2" }}</button></a></li>
+						<li class="paginator__item paginator__item--next">
+							<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"1" }})"><i class="icon ion-ios-arrow-forward"></i></button></a>
+						</li>
+					</ul>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 	<!-- end catalog -->
+
+	<script type="text/javascript">
+		function pageChanger(page) {
+			document.getElementById("page").value = page;
+		}
+	</script>
 
 	<!-- footer -->
 	<footer class="footer">
@@ -524,6 +524,7 @@
 	<script src="../static/js/photoswipe.min.js"></script>
 	<script src="../static/js/photoswipe-ui-default.min.js"></script>
 	<script src="../static/js/main.js"></script>
+</form>
 </body>
 
 </html>
