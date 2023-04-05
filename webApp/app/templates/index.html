@@ -106,7 +106,7 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input name="search_query" placeholder="Search for a movie, TV Series or person that you are looking for">
+							<input name="query" placeholder="Search for a movie, TV Series or person that you are looking for">
 
 							<button type="submit">search</button>
 						</div>
@@ -260,6 +260,7 @@
 												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
+										</span>
 									</div>
 									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
 								</div>
@@ -295,6 +296,7 @@
 												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
+										</span>
 									</div>
 									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{movie.rating.value}}" style="color:white"> {{ movie.rating.value }}</a> </span>
 								</div>
@@ -331,6 +333,7 @@
 												<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 											{%endfor%}
 											</div>
+										</span>
 									</div>
 									<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{tvshow.rating.value}}" style="color:white"> {{ tvshow.rating.value }}</a> </span>
 								</div>

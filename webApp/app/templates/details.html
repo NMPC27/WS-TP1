@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load custom_filters %}
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600%7CUbuntu:300,400,500,700" rel="stylesheet"> 
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="../static/css/bootstrap-reboot.min.css">
+	<link rel="stylesheet" href="../static/css/bootstrap-grid.min.css">
+	<link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="../static/css/jquery.mCustomScrollbar.min.css">
+	<link rel="stylesheet" href="../static/css/nouislider.min.css">
+	<link rel="stylesheet" href="../static/css/ionicons.min.css">
+	<link rel="stylesheet" href="../static/css/plyr.css">
+	<link rel="stylesheet" href="../static/css/photoswipe.css">
+	<link rel="stylesheet" href="../static/css/default-skin.css">
+	<link rel="stylesheet" href="../static/css/main.css">
+
+	<!-- Favicons -->
+	<link rel="icon" type="image/png" href="../static/icon/favicon-32x32.png" sizes="32x32">
+	<link rel="apple-touch-icon" href="../static/icon/favicon-32x32.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="../static/icon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="../static/icon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="../static/icon/apple-touch-icon-144x144.png">
+
+
+
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="Dmitry Volkov">
+	<title>FlixGo – Online Movies, TV Shows & Cinema HTML Template</title>
+
+</head>
+<body class="body">
+	
+	<!-- header -->
+	<header class="header">
+		<div class="header__wrap">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="header__content">
+							<!-- header logo -->
+							<a href="/" class="header__logo">
+								<img src="../static/img/logo.svg" alt="">
+							</a>
+							<!-- end header logo -->
+
+							<!-- header nav -->
+							<ul class="header__nav">
+
+								<li class="header__nav-item">
+									<a href="/" class="header__nav-link">Home</a>
+								</li>
+	
+								<li class="header__nav-item">
+									<a href="/movies/1" class="header__nav-link">Movies</a>
+								</li>
+	
+								<li class="header__nav-item">
+									<a href="/tvshows/1" class="header__nav-link">TV Shows</a>
+								</li>
+	
+								<li class="header__nav-item">
+									<a href="/insert" class="header__nav-link">Insert Data</a>
+								</li>
+	
+								<li class="header__nav-item">
+									<a href="/about" class="header__nav-link">About</a>
+								</li>
+	
+							</ul>
+							<!-- end header nav -->
+
+							<!-- header auth -->
+							<div class="header__auth">
+								<button class="header__search-btn" type="button">
+									<i class="icon ion-ios-search"></i>
+								</button>
+
+								<a href="signin.html" class="header__sign-in">
+									<i class="icon ion-ios-log-in"></i>
+									<span>sign in</span>
+								</a>
+							</div>
+							<!-- end header auth -->
+
+							<!-- header menu btn -->
+							<button class="header__btn" type="button">
+								<span></span>
+								<span></span>
+								<span></span>
+							</button>
+							<!-- end header menu btn -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <!-- header search -->
+    <form action="/search" class="header__search" method="get">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="header__search-content">
+                        <input name="query" placeholder="Search for a movie, TV Series or person that you are looking for">
+
+                        <button type="submit">search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- end header search -->
+	</header>
+	<!-- end header -->
+
+	<!-- details -->
+	<section class="section details">
+		<!-- details background -->
+		<div class="details__bg" data-bg="img/home/home__bg.jpg"></div>
+		<!-- end details background -->
+
+		<!-- details content -->
+		<div class="container">
+			<div class="row">
+				<!-- title -->
+				<div class="col-12">
+					<h1 class="details__title"> {{dic.title.value}}</h1>
+				</div>
+				<!-- end title -->
+
+				<!-- content -->
+				<div class="col-12 col-xl-6">
+					<div class="card card--details">
+						<div class="row">
+							<!-- card cover -->
+							<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-5">
+								<div class="card__cover">
+									{% if dic.img.value != "NO_IMAGE" %}
+										<img src="{{dic.img.value}}" alt="">
+									{% else %}
+										<img src="../static/img/NO_IMAGE.jpg" alt="" style="width: 100%; height: 310px;">
+									{% endif %}
+								</div>
+							</div>
+							<!-- end card cover -->
+
+							<!-- card content -->
+							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
+								<div class="card__content">
+									<div class="card__wrap">
+										<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{dic.rating.value}}" style="color:white"> {{ dic.rating.value }}</a> </span>
+
+										<ul class="card__list">
+											<li>HD</li>
+											<li><a href="/search?type={{dic.type.value}}">{{dic.type.value}}</a></li>
+										</ul>
+									</div>
+
+									<ul class="card__meta">
+										{% comment %} check length of dic.genres.value|split(",") {% endcomment %}
+										<div>
+											<li>
+												<span>
+													{% if dic.genres.value|split:', '|length == 1 %}
+														Genre:
+													{% else %}
+														Genres:
+													{% endif %}
+												</span>
+												{% for genre in dic.genres.value|split:', ' %}
+													<a href="/search?genre={{ genre|urlencode}}">{{ genre }}</a>{% if not loop.last %} {% endif %}
+												{% endfor %}
+											</li>
+										{% comment %} <li><span>Genre:</span> <a href="#">{{dic.genres.value}}</a></li> {% endcomment %}
+										<li><span>Release year:</span> <a href="/search?release_year={{dic.release_year.value}}">{{dic.release_year.value}}</a></li>
+										{%if dic.countries.value|split:', '|length == 1%}
+											<li><span>Country: </span>
+										{% else %}
+											<li><span>Countries: </span>
+										{% endif %}
+
+										{% for country in dic.countries.value|split:', ' %}
+											<a href="/search?country={{ country|urlencode}}">{{ country }}</a>
+											{% if not loop.last %} {% endif %}
+										{% endfor %}
+										<li><span>Date added: </span> {{dic.date_add.value}}</li>
+
+										{%if dic.directors.value|split:', '|length == 1 %}
+											<li><span>Director: </span>
+										{% else %}
+											<li><span>Directors: </span>
+										{% endif %}
+											{% for direct in dic.directors.value|split:', ' %}
+												<a href="/search?director={{ direct|urlencode}}">
+													{{ direct }}
+												</a>
+												{% if not loop.last %} {% endif %}
+											{% endfor %}
+										</li>
+										<li><span>Cast:</span> 
+											{% for actor in dic.cast.value|split:', ' %}
+												<a href="/search?actor={{ actor|urlencode}}">
+													{{ actor }}
+												</a>
+												{% if not loop.last %} {% endif %}
+											{% endfor %}
+										</li>
+									</ul>
+
+									<div class="card__description card__description--details">
+										Description: {{dic.desc.value}}
+									</div>
+								</div>
+							</div>
+							<!-- end card content -->
+						</div>
+					</div>
+				</div>
+				<!-- end content -->
+
+				<!-- player -->
+				<div class="col-12 col-xl-6">
+					{% if dic.trailer.value != "N/A" %}
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/{{dic.trailer.value}}" frameborder="0" allowfullscreen></iframe>
+					{% else %}
+						<img src="../static/img/NO_VIDEO.png" alt="" style="width: 560px; height: 315px;">
+					{% endif %}
+
+				</div>
+				<!-- end player -->
+
+				<div class="col-12">
+					<div class="details__wrap">
+						<!-- availables -->
+						<div class="details__devices">
+							<span class="details__devices-title">Available on devices:</span>
+							<ul class="details__devices-list">
+								<li><i class="icon ion-logo-apple"></i><span>IOS</span></li>
+								<li><i class="icon ion-logo-android"></i><span>Android</span></li>
+								<li><i class="icon ion-logo-windows"></i><span>Windows</span></li>
+							</ul>
+						</div>
+						<!-- end availables -->
+
+						<!-- share -->
+						<div class="details__share">
+							<span class="details__share-title">Share with friends:</span>
+
+							<ul class="details__share-list">
+								<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
+								<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
+								<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
+								<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
+							</ul>
+						</div>
+						<!-- end share -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end details content -->
+	</section>
+	<!-- end details -->
+
+	<!-- content -->
+	<section class="content">
+		<div class="content__head">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<!-- content title -->
+						<h2 class="content__title">Comments</h2>
+						<!-- end content title -->
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-8 col-xl-8">
+					<!-- content tabs -->
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
+							<div class="row">
+								<!-- comments -->
+								<div class="col-12" with="200%">
+									<div class="comments">
+										<ul class="comments__list">
+
+											<li class="comments__item">
+												<div class="comments__autor">
+													<img class="comments__avatar" src="../static/img/user.png" alt="">
+													<span class="comments__name">John Doe</span>
+													<span class="comments__time">30.08.2018, 17:53</span>
+												</div>
+												<p class="comments__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
+												<div class="comments__actions">
+													<div class="comments__rate">
+														<button type="button"><i class="icon ion-md-thumbs-up"></i>12</button>
+
+														<button type="button">7<i class="icon ion-md-thumbs-down"></i></button>
+													</div>
+
+													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
+													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
+												</div>
+											</li>
+
+										</ul>
+
+										<form action="#" class="form">
+											<input class="form__input" type="text" id="name" name="name" placeholder="Name">
+											<textarea id="text" name="comment" class="form__textarea" placeholder="Add comment" style="height: 9.5vw;"></textarea>
+											<button type="button" class="form__btn">Send</button>
+										</form>
+									</div>
+								</div>
+								<!-- end comments -->
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</section>
+	<!-- end content -->
+
+	<!-- footer -->
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				
+				<!-- footer copyright -->
+				<div class="col-12">
+					<div class="footer__copyright">
+						<small><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></small>
+
+						<ul>
+							<li><a href="#">Terms of Use</a></li>
+							<li><a href="#">Privacy Policy</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- end footer copyright -->
+			</div>
+		</div>
+	</footer>
+	<!-- end footer -->
+
+	<!-- Root element of PhotoSwipe. Must have class pswp. -->
+	<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+		<!-- Background of PhotoSwipe. 
+		It's a separate element, as animating opacity is faster than rgba(). -->
+		<div class="pswp__bg"></div>
+
+		<!-- Slides wrapper with overflow:hidden. -->
+		<div class="pswp__scroll-wrap">
+
+			<!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+			<!-- don't modify these 3 pswp__item elements, data is added later on. -->
+			<div class="pswp__container">
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+			</div>
+
+			<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+			<div class="pswp__ui pswp__ui--hidden">
+
+				<div class="pswp__top-bar">
+
+					<!--  Controls are self-explanatory. Order can be changed. -->
+
+					<div class="pswp__counter"></div>
+
+					<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+					<!-- Preloader -->
+					<div class="pswp__preloader">
+						<div class="pswp__preloader__icn">
+							<div class="pswp__preloader__cut">
+								<div class="pswp__preloader__donut"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+				<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+				<div class="pswp__caption">
+					<div class="pswp__caption__center"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- JS -->
+	<script src="../static/js/jquery-3.3.1.min.js"></script>
+	<script src="../static/js/bootstrap.bundle.min.js"></script>
+	<script src="../static/js/owl.carousel.min.js"></script>
+	<script src="../static/js/jquery.mousewheel.min.js"></script>
+	<script src="../static/js/jquery.mCustomScrollbar.min.js"></script>
+	<script src="../static/js/wNumb.js"></script>
+	<script src="../static/js/nouislider.min.js"></script>
+	<script src="../static/js/plyr.min.js"></script>
+	<script src="../static/js/jquery.morelines.min.js"></script>
+	<script src="../static/js/photoswipe.min.js"></script>
+	<script src="../static/js/photoswipe-ui-default.min.js"></script>
+	<script src="../static/js/main.js"></script>
+</body>
+
+</html>

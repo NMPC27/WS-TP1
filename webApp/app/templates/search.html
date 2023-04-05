@@ -107,7 +107,7 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input name="search_query" placeholder="Search for a movie, TV Series that you are looking for" value="{{ search_query }}">
+							<input name="query" placeholder="Search for a movie, TV Series that you are looking for" value="{{ search_query }}">
 
 							<button type="submit">search</button>
 						</div>
@@ -126,12 +126,12 @@
 				<div class="col-12">
 					<div class="section__wrap">
 						<!-- section title -->
-						<h2 class="section__title">Search: {{ search_query }}</h2>
+						<h2 class="section__title">Search: {{ search }}</h2>
 						<!-- end section title -->
 
 						<!-- breadcrumb -->
 						<ul class="breadcrumb">
-							<li class="breadcrumb__item"><a href="#">Home</a></li>
+							<li class="breadcrumb__item"><a href="/">Home</a></li>
 							<li class="breadcrumb__item breadcrumb__item--active">Search</li>
 						</ul>
 						<!-- end breadcrumb -->
@@ -385,7 +385,7 @@
 								<span class="filter__item-label">TYPE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value={{ type }} id="type" name="type" style="width: 4.5vw;">
+									<input readonly="readonly" value="{{ type }}" id="type" name="type" style="width: 4.5vw;">
 									<span></span>
 								</div>
 
@@ -428,8 +428,8 @@
 									<i class="icon ion-ios-play"></i>
 								</a>
 							</div>
-							<div class="card__content">
-								<h3 class="card__title"><a href="/details/{{show.title_id.value}}">{{ show.title.value }}</a></h3>
+							<div class="card__content" >
+								<h3 class="card__title" ><a href="/details/{{show.title_id.value}}">{{ show.title.value }}</a></h3>
 								
 								<span class="card__category">
 
@@ -438,8 +438,8 @@
 										<a href="/search?genre={{genre|urlencode}}">{{ genre }}{% if not forloop.last %}, {% endif %}</a>
 									{%endfor%}
 									</div>
-
-								<span class="card__rate"><i class="icon ion-ios-star"></i> {{ show.rating.value }} </span>
+								</span>
+								<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
 							</div>
 						</div>
 					</div>
@@ -448,7 +448,8 @@
 
 
 				<input hidden id='page' name='page' value="{{ page }}">
-				{% if page == "1" %}
+
+				{% if page == "1"%}
 				<!-- paginator -->
 				<div class="col-12">
 					<ul class="paginator">
@@ -463,20 +464,46 @@
 				</div>
 				<!-- end paginator -->
 				{% elif page != "1" %}
-				<!-- paginator -->
-				<div class="col-12">
-					<ul class="paginator">
-						<li class="paginator__item paginator__item--prev">
-							<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})"><i class="icon ion-ios-arrow-back"></i></button></a>
-						</li>
-						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})">{{ page|add:"-1" }}</button></a></li>
-						<li class="paginator__item paginator__item--active"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page }})">{{ page }}</button></a></li>
-						<li class="paginator__item"><a><button style="color: white;width: inherit;"onclick="pageChanger({{ page|add:"1" }})" >{{ page|add:"1" }}</button></a></li>
-						<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"2" }})">{{ page|add:"2" }}</button></a></li>
-						<li class="paginator__item paginator__item--next">
-							<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"1" }})"><i class="icon ion-ios-arrow-forward"></i></button></a>
-						</li>
-					</ul>
+					{%if shows|length != 12 %}
+						<!-- paginator -->
+						<div class="col-12">
+							<ul class="paginator">
+								<li class="paginator__item paginator__item--prev">
+									<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})"><i class="icon ion-ios-arrow-back"></i></button></a>
+								</li>
+								{%if page != "2"%}
+								<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-3" }})">{{ page|add:"-3" }}</button></a></li>
+								{% endif %}
+								{%if page != "2" and page != "3"%}
+								<li class="paginator__item"><a><button style="color: white;width: inherit;"onclick="pageChanger({{ page|add:"-2" }})" >{{ page|add:"-2" }}</button></a></li>
+								{% endif %}
+								
+								<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})">{{ page|add:"-1" }}</button></a></li>
+								<li class="paginator__item paginator__item--active"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page }})">{{ page }}</button></a></li>
+								<li class="paginator__item paginator__item--next" style="visibility: hidden;">
+									<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"1" }})"><i class="icon ion-ios-arrow-forward"></i></button></a>
+								</li>
+							</ul>
+						</div>
+						<!-- end paginator -->
+					{% else %}
+						<!-- paginator -->
+						<div class="col-12">
+							<ul class="paginator">
+								<li class="paginator__item paginator__item--prev">
+									<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})"><i class="icon ion-ios-arrow-back"></i></button></a>
+								</li>
+								<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"-1" }})">{{ page|add:"-1" }}</button></a></li>
+								<li class="paginator__item paginator__item--active"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page }})">{{ page }}</button></a></li>
+								<li class="paginator__item"><a><button style="color: white;width: inherit;"onclick="pageChanger({{ page|add:"1" }})" >{{ page|add:"1" }}</button></a></li>
+								<li class="paginator__item"><a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"2" }})">{{ page|add:"2" }}</button></a></li>
+								<li class="paginator__item paginator__item--next">
+									<a><button style="color: white;width: inherit;" onclick="pageChanger({{ page|add:"1" }})"><i class="icon ion-ios-arrow-forward"></i></button></a>
+								</li>
+							</ul>
+						</div>
+						<!-- end paginator -->
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>

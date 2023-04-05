@@ -55,7 +55,7 @@ def select_all_12():
 
 
     
-def select_all_movies_12():
+def select_all_movies_12(page):
 
     query = """
         PREFIX mov:<http://netflixUA.org/>
@@ -77,7 +77,7 @@ def select_all_movies_12():
             ?title_id mov:date_added ?date_add         
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
-        ORDER BY Rand()
+        OFFSET """+ str((page-1)*12) +"""
         LIMIT 12
     """
 
@@ -96,7 +96,7 @@ def select_all_movies_12():
         e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
     return res
 
-def select_all_TVshow_12():
+def select_all_TVshow_12(page):
 
     query = """
         PREFIX mov:<http://netflixUA.org/>
@@ -118,7 +118,7 @@ def select_all_TVshow_12():
             ?title_id mov:date_added ?date_add         
         }
         GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
-        ORDER BY Rand()
+        OFFSET """+ str((page-1)*12) +"""
         LIMIT 12
     """
 
@@ -140,33 +140,36 @@ def select_all_TVshow_12():
 def get_showById(id):
 
     query = """
-    PREFIX mov:<http://netflixUA.org/>
-    PREFIX id:<http://netflixUA.org/show/>
+        PREFIX mov:<http://netflixUA.org/>
+        PREFIX id:<http://netflixUA.org/show/>
 
-    SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)  (GROUP_CONCAT(DISTINCT ?cast_person; SEPARATOR=", ") as ?cast)
+        SELECT DISTINCT ?title ?type ?title_id ?img ?rating 
+            (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) 
+            (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) 
+            ?desc ?release_year ?date_add 
+            (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)  
+            (GROUP_CONCAT(DISTINCT ?cast_person; SEPARATOR=", ") as ?cast)
+            ?trailer
         WHERE {
             ?title_id mov:title ?title .
-                id:"""+id+""" mov:title ?title .
+            id:"""+id+""" mov:title ?title .
             OPTIONAL {?title_id mov:rating ?rating }
             OPTIONAL {?title_id mov:director ?director .
-                ?director mov:name ?director_name .}
-            OPTIONAL {
-                                ?title_id mov:listed_in ?listed_in .
-                ?listed_in mov:name ?genre .
-            }
-                OPTIONAL{?title_id mov:type ?type .
-            ?title_id mov:img ?img .
-            ?title_id mov:country ?countrys .
-            ?countrys mov:name ?country .
-            ?title_id mov:description ?desc .
-            ?title_id mov:release_year ?release_year .
-            ?title_id mov:date_added ?date_add .
-                ?title_id mov:cast ?person .
-                ?person mov:name ?cast_person .
-            }
-
+                    ?director mov:name ?director_name .}
+            OPTIONAL {?title_id mov:listed_in ?listed_in .
+                    ?listed_in mov:name ?genre .}
+            OPTIONAL {?title_id mov:type ?type .
+                    ?title_id mov:img ?img .
+                    ?title_id mov:country ?countrys .
+                    ?countrys mov:name ?country .
+                    ?title_id mov:description ?desc .
+                    ?title_id mov:release_year ?release_year .
+                    ?title_id mov:date_added ?date_add .
+                    ?title_id mov:cast ?person .
+                    ?person mov:name ?cast_person .
+                    ?title_id mov:trailer ?trailer .}
         }
-        GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add
+        GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add ?trailer
     """
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
@@ -219,7 +222,7 @@ def select_search(name):
         
 def searchQuery(argsdict):
     
-    input = argsdict.get('search_query')
+    input = argsdict.get('query')
     title = argsdict.get('title')
     type = argsdict.get('type')
     genre = argsdict.get('genre')
@@ -227,6 +230,7 @@ def searchQuery(argsdict):
     director = argsdict.get('director')
     actor = argsdict.get('actor')
     release_year = argsdict.get('release_year')
+    rating = argsdict.get('rating')
     
     query = """
         PREFIX mov:<http://netflixUA.org/>
@@ -295,7 +299,6 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
             ?title_id mov:cast ?person .
             ?person mov:name ?cast_person .
-
             """
     if input != None:
         query += "FILTER(REGEX(?director, \""+input+"\", \"i\")) \n"
@@ -340,7 +343,7 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
             ?title_id mov:cast ?person .
             ?person mov:name ?cast_person .
-
+            
             """
     if input != None:
         query += "FILTER(REGEX(?person, \""+input+"\", \"i\")) \n"
@@ -370,11 +373,18 @@ def searchQuery(argsdict):
     }
     GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
     """
+    
+    if rating != None:
+        lower, upper = rating.split('-')
+        query += f"HAVING(xsd:float(?rating) >= {lower} && xsd:float(?rating) <= {upper}) \n"
+
+    page = argsdict.get('page') if argsdict.get('page') != None else 1
+    query += "OFFSET "+ str((int(page)-1)*12)
     limit = argsdict.get('limit')
     if limit != None:
-        query += "LIMIT "+str(limit)
+        query += " LIMIT "+str(limit)
         
-    print(query)
+    # print(query)
     
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
@@ -390,7 +400,7 @@ def getNewTitleId():#!TODO GET A NEW ID FROM DB
     CurrID = 8888
     return str(CurrID+1)
 
-def insertData(title, type=None, rating=None, director=None, img=None, listed_in=None, country=None, description=None, release_year=None, date_added=None, cast=None):
+def insertData(title, type=None, rating=None, director=None, img=None, listed_in=None, country=None, description=None, release_year=None, date_added=None, cast=None,trailer=None):
     
     curr_title_id = getNewTitleId()
     
@@ -406,7 +416,8 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
         release_year = "UNKNOWN"
     if date_added == None:
         date_added = "UNKNOWN"
-
+    if trailer == None:
+        trailer = "UNKNOWN"
 
     query = """
         PREFIX mov:<http://netflixUA.org/>
@@ -415,6 +426,7 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
         PREFIX listed_in: <http://netflixUA.org/genre/>
         PREFIX country: <http://netflixUA.org/country/>
         PREFIX person: <http://netflixUA.org/person/>
+        PREFIX cast: <http://netflixUA.org/cast/>
         INSERT DATA
         {
             title:"""+str(curr_title_id)+""" mov:title '"""+title+"""' .
@@ -424,6 +436,7 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
             title:"""+str(curr_title_id)+""" mov:description '"""+description+"""' .
             title:"""+str(curr_title_id)+""" mov:release_year '"""+release_year+"""' .
             title:"""+str(curr_title_id)+""" mov:date_added '"""+date_added+"""' .
+            title:"""+str(curr_title_id)+""" mov:trailer '"""+trailer+"""' .
     """
     if director == None:
         director = "UNKNOWN"
@@ -467,11 +480,11 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
             query += cast_uri+" mov:name '"+name+"' .\n"
     query += "}"
 
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
-    res = json.loads(res)
+    payload_query = {"update": query}
+    res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
+    # res = json.loads(res)
     
-    return res['results']['bindings']
+    # return res['results']['bindings']
 
 
 def deleteByTitle(title):
@@ -484,9 +497,11 @@ def deleteByTitle(title):
             ?genre_id ?genre_p ?genre_o .
             ?country_id ?country_p ?country_o .
             ?person_id ?person_p ?person_o .
+            ?trailer_id ?trailer_p ?trailer_o .
+            ?type_id ?type_p ?type_o .
             }
             WHERE {
-                ?title_id mov:title "teste" .
+                ?title_id mov:title '"""+title+"""' .
                 ?title_id ?p ?o .
                 OPTIONAL {
                     ?title_id mov:director ?director_id .
@@ -500,14 +515,20 @@ def deleteByTitle(title):
                 OPTIONAL {
                     ?title_id mov:cast ?person_id .
                 }
+                Optional{
+					?title_id mov:type ?type_id
+                }
+                 Optional{
+					?title_id mov:type ?trailer_id
+                }
             }
-        }
+        
     """
 
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
-    res = json.loads(res)
+    payload_query = {"update": query}
+    res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
+    # res = json.loads(res)
 
-    return res['results']['bindings']
+    # return res['results']['bindings']
 
 

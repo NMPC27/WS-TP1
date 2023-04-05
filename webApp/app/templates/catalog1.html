@@ -105,7 +105,7 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="header__search-content">
-							<input name="search_query" placeholder="Search for a movie, TV Series or person that you are looking for">
+							<input name="query" placeholder="Search for a movie, TV Series or person that you are looking for">
 
 							<button type="submit">search</button>
 						</div>
@@ -124,13 +124,13 @@
 				<div class="col-12">
 					<div class="section__wrap">
 						<!-- section title -->
-						<h2 class="section__title">{% if movies == 1 %} Movies {% else %} TV Show {% endif %}</h2>
+						<h2 class="section__title">{% if type == "Movies" %} Movies {% else %} TV Show {% endif %}</h2>
 						<!-- end section title -->
 
 						<!-- breadcrumb -->
 						<ul class="breadcrumb">
-							<li class="breadcrumb__item"><a href="#">Home</a></li>
-							<li class="breadcrumb__item breadcrumb__item--active">{% if movies == 1 %} Movies {% else %} TV Show {% endif %}</li>
+							<li class="breadcrumb__item"><a href="/">Home</a></li>
+							<li class="breadcrumb__item breadcrumb__item--active">{% if type == "Movies" %} Movies {% else %} TV Show {% endif %}</li>
 						</ul>
 						<!-- end breadcrumb -->
 					</div>
@@ -146,10 +146,10 @@
 			<div class="row">
 				<div class="col-12">
 					<form action="/search" method="get">
-						{% if movies == 1 %} 
-							<input hidden value="1" id="movies" name="movies">
+						{% if type == "Movies" %} 
+							<input hidden value="Movies" id="movies" name="type">
 						{% else %}
-							<input hidden value="0" id="movies" name="movies">
+							<input hidden value="Tv Shows" id="movies" name="type">
 						{% endif %}
 						
 					<div class="filter__content">
@@ -290,15 +290,15 @@
 									{%endfor%}
 									</div>
 
-								<span class="card__rate"><i class="icon ion-ios-star"></i> {{ show.rating.value }} </span>
 							</div>
+							<span class="card__rate"><i class="icon ion-ios-star"></i><a href="/search?rating={{show.rating.value}}" style="color:white"> {{ show.rating.value }}</a> </span>
 						</div>
 					</div>
 					<!-- end card -->
 				{% endfor %}
 
 
-				{% if movies == 1 %}
+				{% if type == "Movies" %}
 					{% if page == 1 %}
 						<!-- paginator -->
 						<div class="col-12">
@@ -320,10 +320,10 @@
 							<li class="paginator__item paginator__item--prev">
 								<a href="/movies/{{ page|add:"-1" }}"><i class="icon ion-ios-arrow-back"></i></a>
 							</li>
-							<li class="paginator__item paginator__item--active"><a href="#">{{ page }}</a></li>
-							<li class="paginator__item"><a href="/movies/{{ page|add:"1" }}">{{ page|add:"1" }}</a></li>
-							<li class="paginator__item"><a href="/movies/{{ page|add:"2" }}">{{ page|add:"2" }}</a></li>
-							<li class="paginator__item"><a href="/movies/{{ page|add:"3" }}">{{ page|add:"3" }}</a></li>
+							<li class="paginator__item"><a href="/movies/{{ page|add:"-1" }}">{{ page|add:"-1" }}</a></li>
+							<li class="paginator__item paginator__item--active"><a href="/movies/{{ page }}">{{ page }}</a></li>
+							<li class="paginator__item"><a href="/movies/{{ page|add:"2" }}">{{ page|add:"1" }}</a></li>
+							<li class="paginator__item"><a href="/movies/{{ page|add:"3" }}">{{ page|add:"2" }}</a></li>
 							<li class="paginator__item paginator__item--next">
 								<a href="/movies/{{ page|add:"1" }}"><i class="icon ion-ios-arrow-forward"></i></a>
 							</li>
@@ -353,10 +353,10 @@
 							<li class="paginator__item paginator__item--prev">
 								<a href="/tvshows/{{ page|add:"-1" }}"><i class="icon ion-ios-arrow-back"></i></a>
 							</li>
-							<li class="paginator__item paginator__item--active"><a href="#">{{ page }}</a></li>
-							<li class="paginator__item"><a href="/tvshows/{{ page|add:"1" }}">{{ page|add:"1" }}</a></li>
-							<li class="paginator__item"><a href="/tvshows/{{ page|add:"2" }}">{{ page|add:"2" }}</a></li>
-							<li class="paginator__item"><a href="/tvshows/{{ page|add:"3" }}">{{ page|add:"3" }}</a></li>
+							<li class="paginator__item"><a href="/tvshows/{{ page|add:"-1" }}">{{ page|add:"-1" }}</a></li>
+							<li class="paginator__item paginator__item--active"><a href="/tvshows/{{ page }}">{{ page }}</a></li>
+							<li class="paginator__item"><a href="/tvshows/{{ page|add:"2" }}">{{ page|add:"1" }}</a></li>
+							<li class="paginator__item"><a href="/tvshows/{{ page|add:"3" }}">{{ page|add:"2" }}</a></li>
 							<li class="paginator__item paginator__item--next">
 								<a href="/movies/{{ page|add:"1" }}"><i class="icon ion-ios-arrow-forward"></i></a>
 							</li>
