@@ -301,7 +301,7 @@ def searchQuery(argsdict):
             ?person mov:name ?cast_person .
             """
     if input != None:
-        query += "FILTER(REGEX(?director, \""+input+"\", \"i\")) \n"
+        query += "FILTER(REGEX(?director_name, \""+input+"\", \"i\")) \n"
         
     if title != None:
         query += "?title_id mov:title \""+title+"\" .\n"
@@ -346,7 +346,7 @@ def searchQuery(argsdict):
             
             """
     if input != None:
-        query += "FILTER(REGEX(?person, \""+input+"\", \"i\")) \n"
+        query += "FILTER(REGEX(?person_name, \""+input+"\", \"i\")) \n"
     if title != None:
         query += "?title_id mov:title \""+title+"\" .\n"
     if type != None:
@@ -384,7 +384,7 @@ def searchQuery(argsdict):
     if limit != None:
         query += " LIMIT "+str(limit)
         
-    # print(query)
+    print(query)
     
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
