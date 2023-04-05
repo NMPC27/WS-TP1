@@ -4,7 +4,7 @@ import json
 import time
 theMovie_api_key = "c08d35426ff385e63e4b2657a12bafea"
 
-dict = json.loads(open('../test.json').read())
+dict = json.loads(open('test.json').read())
 f=open('images.csv','a')
 i=0
 for show in dict:
