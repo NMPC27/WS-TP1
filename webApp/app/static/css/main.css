@@ -38,6 +38,16 @@ Primary use:	FlixGo Template
 /*==============================
 	Common styles
 ==============================*/
+
+.error-message {
+  position: absolute;
+  color: red;
+  font-size: 0.8em;
+  display: block;
+  margin-top: -1.5em;
+}
+
+
 html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;

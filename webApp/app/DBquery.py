@@ -1,6 +1,7 @@
 import json
 from s4api.graphdb_api import GraphDBApi
 from s4api.swagger import ApiClient
+import urllib
 
 
 endpoint = "http://localhost:7200"
@@ -188,37 +189,39 @@ def get_showById(id):
 def select_search(name):
     query = """
         PREFIX mov:<http://netflixUA.org/>
-        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add
-        WHERE{
-            ?title_id mov:title '"""+name+"""' .
-            ?title_id mov:type ?type  .
-            ?title_id mov:img ?img .
+        
+        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors) (GROUP_CONCAT(DISTINCT ?cast_person; SEPARATOR=", ") as ?persons) ?trailer
+        WHERE {
+            
             ?title_id mov:title ?title .
+            ?title_id mov:type ?type .
+            ?title_id mov:rating ?rating .
+            ?title_id mov:director ?director .
+            ?director mov:name ?director_name .
+            ?title_id mov:img ?img .
             ?title_id mov:listed_in ?listed_in .
             ?listed_in mov:name ?genre .
             ?title_id mov:country ?countrys .
             ?countrys mov:name ?country .
             ?title_id mov:description ?desc .
             ?title_id mov:release_year ?release_year .
-            ?title_id mov:date_added ?date_add
-        }
-        GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add
-        
+            ?title_id mov:date_added ?date_add . 
+    		?title_id mov:cast ?person .
+    		?person mov:name ?cast_person .
+            ?title_id mov:trailer ?trailer .
+            FILTER(REGEX(?title, \""""+name+"""\", \"i\")) \n
+    }
+    GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add ?trailer    
     """
-
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
-    res = json.loads(res)
-    
-    # for e in res['results']['bindings']:
-    #     print(e['title_id']['value'])
-    #     print(name)
-    #     print(e['type']['value'])
-    #     print(e['img']['value'])
-    #     print("-----------------")
+    try:
+        res = json.loads(res)
+    except:
+        return []
     for e in res['results']['bindings']:
         e['title_id']['value'] = e['title_id']['value'].split('/')[-1]
-    return res['results']['bindings']
+    return res['results']['bindings'] 
         
 def searchQuery(argsdict):
     
@@ -235,7 +238,7 @@ def searchQuery(argsdict):
     query = """
         PREFIX mov:<http://netflixUA.org/>
         
-        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)
+        SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)  ?trailer
         WHERE {
             {
             ?title_id mov:title ?title .
@@ -254,6 +257,7 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
     		?title_id mov:cast ?person .
     		?person mov:name ?cast_person .
+            ?title_id mov:trailer ?trailer .
             
             """
     if input != None:
@@ -274,10 +278,6 @@ def searchQuery(argsdict):
     if actor != None:
         query += "?title_id mov:cast ?person .\n"
         query += "?person mov:name \""+actor+"\" .\n"
-    if release_year != None:
-        query += "?title_id mov:release_year \""+release_year+"\" .\n"
-    # if date_added != None:
-    #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
         
     query += """
     }
@@ -299,6 +299,7 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
             ?title_id mov:cast ?person .
             ?person mov:name ?cast_person .
+            ?title_id mov:trailer ?trailer .
             """
     if input != None:
         query += "FILTER(REGEX(?director_name, \""+input+"\", \"i\")) \n"
@@ -319,10 +320,6 @@ def searchQuery(argsdict):
     if actor != None:
         query += "?title_id mov:cast ?person .\n"
         query += "?person mov:name \""+actor+"\" .\n"
-    if release_year != None:
-        query += "?title_id mov:release_year \""+release_year+"\" .\n"
-    # if date_added != None:
-    #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
     query += """
     }
         UNION
@@ -343,6 +340,7 @@ def searchQuery(argsdict):
             ?title_id mov:date_added ?date_add . 
             ?title_id mov:cast ?person .
             ?person mov:name ?cast_person .
+            ?title_id mov:trailer ?trailer .
             
             """
     if input != None:
@@ -363,20 +361,24 @@ def searchQuery(argsdict):
     if actor != None:
         query += "?title_id mov:cast ?person .\n"
         query += "?person mov:name \""+actor+"\" .\n"
-    if release_year != None:
-        query += "?title_id mov:release_year \""+release_year+"\" .\n"
-    # if date_added != None:
-    #     query += "?title_id mov:date_added \""+date_added+"\" .\n"
 
     query += """
         }
     }
-    GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add 
+    GROUP BY ?title ?type ?title_id ?img ?rating ?desc ?release_year ?date_add ?trailer
     """
     
     if rating != None:
         lower, upper = rating.split('-')
-        query += f"HAVING(xsd:float(?rating) >= {lower} && xsd:float(?rating) <= {upper}) \n"
+        query += f"HAVING(xsd:float(?rating) >= {lower} && xsd:float(?rating) < {upper}) \n"
+        
+    if release_year != None:
+        if "-" not in release_year:
+            lower =release_year
+            upper = int(release_year)+1
+        else:
+            lower, upper = release_year.split('-')
+        query += f"HAVING(xsd:integer(?release_year) >= {lower} && xsd:integer(?release_year) < {upper}) \n"
 
     page = argsdict.get('page') if argsdict.get('page') != None else 1
     query += "OFFSET "+ str((int(page)-1)*12)
@@ -384,7 +386,6 @@ def searchQuery(argsdict):
     if limit != None:
         query += " LIMIT "+str(limit)
         
-    print(query)
     
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
@@ -397,19 +398,37 @@ def searchQuery(argsdict):
     return res['results']['bindings'] 
 
 def getNewTitleId():#!TODO GET A NEW ID FROM DB
-    CurrID = 8888
-    return str(CurrID+1)
-
-def insertData(title, type=None, rating=None, director=None, img=None, listed_in=None, country=None, description=None, release_year=None, date_added=None, cast=None,trailer=None):
     
-    curr_title_id = getNewTitleId()
+    query= """
+    PREFIX mov:<http://netflixUA.org/>
+
+    SELECT (COUNT(?id) AS ?numShows)
+    WHERE {
+        ?id mov:title ?title .
+    } 
+    """
+    
+    payload_query = {"query": query}
+    res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
+    try:
+        res = json.loads(res)
+    except:
+        return -1
+    CurrID = int(res['results']['bindings'][0]['numShows']['value'])
+    # return str(CurrID+1)
+    return "9999"
+
+def insertData(title, type=None, rating=None, director=None, img=None, listed_in=None, country=None, description=None, release_year=None, date_added=None, cast=None,trailer=None,title_id=None):
+    
+    if title_id == None:
+        title_id = getNewTitleId()
     
     if type == None:
         type ="UNKNOWN"
     if rating == None:
-        rating = "UNKNOWN"
+        rating = "N/A"
     if img == None:
-        img = "UNKNOWN"
+        img = "NO_IMAGE"
     if description == None:
         description = "UNKNOWN"
     if release_year == None:
@@ -429,59 +448,60 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
         PREFIX cast: <http://netflixUA.org/cast/>
         INSERT DATA
         {
-            title:"""+str(curr_title_id)+""" mov:title '"""+title+"""' .
-            title:"""+str(curr_title_id)+""" mov:type '"""+type+"""' .
-            title:"""+str(curr_title_id)+""" mov:rating '"""+rating+"""' .
-            title:"""+str(curr_title_id)+""" mov:img '"""+img+"""' .
-            title:"""+str(curr_title_id)+""" mov:description '"""+description+"""' .
-            title:"""+str(curr_title_id)+""" mov:release_year '"""+release_year+"""' .
-            title:"""+str(curr_title_id)+""" mov:date_added '"""+date_added+"""' .
-            title:"""+str(curr_title_id)+""" mov:trailer '"""+trailer+"""' .
+            title:"""+title_id+""" mov:title \""""+title+"""\" .
+            title:"""+title_id+""" mov:type '"""+type+"""' .
+            title:"""+title_id+""" mov:rating '"""+rating+"""' .
+            title:"""+title_id+""" mov:img '"""+img+"""' .
+            title:"""+title_id+""" mov:description '"""+description+"""' .
+            title:"""+title_id+""" mov:release_year '"""+release_year+"""' .
+            title:"""+title_id+""" mov:date_added '"""+date_added+"""' .
+            title:"""+title_id+""" mov:trailer '"""+trailer+"""' .
     """
     if director == None:
         director = "UNKNOWN"
-        director_uri = "person:"+director.lower().replace(" ", "_")
-        query += " title:"+str(curr_title_id)+" mov:director "+director_uri+" .\n"
-        query += director_uri+" mov:name '"+director+"' .\n"
+        director_uri = "person:"+director.lower().strip().replace(" ", "_")
+        query += " title:"+title_id+" mov:director "+director_uri+" .\n"
+        query += director_uri+" mov:name '"+director.strip()+"' .\n"
     else:
         for name in director:
-            director_uri = "person:"+name.lower().replace(" ", "_")
-            query += " title:"+str(curr_title_id)+" mov:director "+director_uri+" .\n"
+            director_uri = "person:"+name.lower().strip().replace(" ", "_")
+            query += " title:"+title_id+" mov:director "+director_uri+" .\n"
             query += director_uri+" mov:name '"+name+"' .\n"
     if listed_in == None:
         listed_in = "UNKNOWN"
-        listed_in_uri = "listed_in:"+listed_in.lower().replace(" ", "_")
-        query += " title:"+str(curr_title_id)+" mov:listed_in "+listed_in_uri+" .\n"
-        query += listed_in_uri+" mov:name '"+listed_in+"' .\n"
+        listed_in_uri = "listed_in:"+listed_in.lower().strip().replace(" ", "_")
+        query += " title:"+title_id+" mov:listed_in "+listed_in_uri+" .\n"
+        query += listed_in_uri+" mov:name '"+listed_in.strip()+"' .\n"
     else:
         for name in listed_in:
-            listed_in_uri = "listed_in:"+name.lower().replace(" ", "_")
-            query += " title:"+str(curr_title_id)+" mov:listed_in "+listed_in_uri+" .\n"
-            query += listed_in_uri+" mov:name '"+name+"' .\n"
+            listed_in_uri = "listed_in:"+urllib.parse.quote(name.lower().strip().replace(" ", "_"))
+            query += " title:"+title_id+" mov:listed_in "+listed_in_uri+" .\n"
+            query += listed_in_uri+" mov:name '"+name.strip()+"' .\n"
     if country == None:
         country = "UNKNOWN"
-        country_uri = "country:"+country.lower().replace(" ", "_")
-        query += " title:"+str(curr_title_id)+" mov:country "+country_uri+" .\n"
-        query += country_uri+" mov:name '"+country+"' .\n"
+        country_uri = "country:"+country.lower().strip().replace(" ", "_")
+        query += " title:"+title_id+" mov:country "+country_uri+" .\n"
+        query += country_uri+" mov:name '"+country.strip()+"' .\n"
     else:
         for name in country:
-            country_uri = "country:"+name.lower().replace(" ", "_")
-            query += " title:"+str(curr_title_id)+" mov:country "+country_uri+" .\n"
-            query += country_uri+" mov:name '"+name+"' .\n"
+            country_uri = "country:"+name.lower().strip().replace(" ", "_")
+            query += " title:"+title_id+" mov:country "+country_uri+" .\n"
+            query += country_uri+" mov:name '"+name.strip()+"' .\n"
     if cast == None:
         cast = "UNKNOWN"
-        cast_uri = "person:"+cast.lower().replace(" ", "_")
-        query += " title:"+str(curr_title_id)+" mov:cast "+cast_uri+" .\n"
-        query += cast_uri+" mov:name '"+cast+"' .\n"
+        cast_uri = "person:"+cast.lower().strip().replace(" ", "_")
+        query += " title:"+title_id+" mov:cast "+cast_uri+" .\n"
+        query += cast_uri+" mov:name '"+cast.strip()+"' .\n"
     else:
         for name in cast:
-            cast_uri = "cast:"+name.lower().replace(" ", "_")
-            query += " title:"+str(curr_title_id)+" mov:cast "+cast_uri+" .\n"
-            query += cast_uri+" mov:name '"+name+"' .\n"
+            cast_uri = "cast:"+name.lower().strip().replace(" ", "_")
+            query += " title:"+title_id+" mov:cast "+cast_uri+" .\n"
+            query += cast_uri+" mov:name '"+name.strip()+"' .\n"
     query += "}"
-
+    print(query)
     payload_query = {"update": query}
     res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
+    
     # res = json.loads(res)
     
     # return res['results']['bindings']
@@ -524,11 +544,24 @@ def deleteByTitle(title):
             }
         
     """
-
+    print("delete",query)
     payload_query = {"update": query}
     res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
-    # res = json.loads(res)
 
-    # return res['results']['bindings']
+def getTitleById(id):
+    query = """
+    PREFIX mov: <http://netflixUA.org/>
+    PREFIX show: <http://netflixUA.org/show/>
 
-
+    SELECT DISTINCT ?title      
+    WHERE {
+        show:"""+id+""" mov:title ?title .
+    }
+    """
+    payload_query = {"query": query}
+    res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
+    print(query)
+    print(res)
+    res = json.loads(res)
+    
+    return res['results']['bindings']

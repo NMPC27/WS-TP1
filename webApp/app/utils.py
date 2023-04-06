@@ -29,6 +29,21 @@ def validate_request(request):
                 returndict['rating'] = "All"
         else:
             returndict['rating'] = "All"       
-            
+    
+    if returndict.get('release_year'):
+        if returndict.get('release_year').isdigit():
+            if int(returndict.get('release_year')) < 1900 or int(returndict.get('release_year')) > 2021:
+                returndict['release_year'] = "All"
+            else:
+                
+                returndict['release_year'] = f"{returndict.get('release_year')}"
+        elif re.match(r'(\d{4})\-(\d{4})', returndict.get('release_year')):
+            n1, n2 = returndict.get('release_year').split('-')
+            if int(n1) > int(n2):
+                returndict['release_year'] = "All"
+            if int(n1) < 1900 or int(n2) > 2021:
+                returndict['release_year'] = "All"
+        else:
+            returndict['release_year'] = "All"
         
     return returndict

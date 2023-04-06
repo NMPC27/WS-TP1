@@ -2,217 +2,341 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Font -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600%7CUbuntu:300,400,500,700" rel="stylesheet"> 
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600%7CUbuntu:300,400,500,700" rel="stylesheet">
 
-	<!-- CSS -->
-	<link rel="stylesheet" href="../static/css/bootstrap-reboot.min.css">
-	<link rel="stylesheet" href="../static/css/bootstrap-grid.min.css">
-	<link rel="stylesheet" href="../static/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="../static/css/jquery.mCustomScrollbar.min.css">
-	<link rel="stylesheet" href="../static/css/nouislider.min.css">
-	<link rel="stylesheet" href="../static/css/ionicons.min.css">
-	<link rel="stylesheet" href="../static/css/plyr.css">
-	<link rel="stylesheet" href="../static/css/photoswipe.css">
-	<link rel="stylesheet" href="../static/css/default-skin.css">
-	<link rel="stylesheet" href="../static/css/main.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="../static/css/nouislider.min.css">
+    <link rel="stylesheet" href="../static/css/ionicons.min.css">
+    <link rel="stylesheet" href="../static/css/plyr.css">
+    <link rel="stylesheet" href="../static/css/photoswipe.css">
+    <link rel="stylesheet" href="../static/css/default-skin.css">
+    <link rel="stylesheet" href="../static/css/main.css">
 
-	<!-- Favicons -->
-	<link rel="icon" type="image/png" href="../static/icon/favicon-32x32.png" sizes="32x32">
-	<link rel="apple-touch-icon" href="../static/icon/favicon-32x32.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="../static/icon/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="../static/icon/apple-touch-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="../static/icon/apple-touch-icon-144x144.png">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../static/icon/favicon-32x32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../static/icon/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../static/icon/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../static/icon/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../static/icon/apple-touch-icon-144x144.png">
 
-	<meta name="description" content="">
-	<meta name="keywords" content="">
-	<meta name="author" content="Dmitry Volkov">
-	<title>FlixGo – Online Movies, TV Shows & Cinema HTML Template</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Dmitry Volkov">
+    <title>FlixGo – Online Movies, TV Shows & Cinema HTML Template</title>
+
+    <script>
+        window.addEventListener("load",init);
+        function init()
+          {document.getElementById("insertform").addEventListener("submit",validateForm);}
+            function validateForm() {
+                
+                var type = document.getElementById("insert-input-type").value;
+                var date_added = document.getElementById("insert-input-date_add").value;
+                var year = document.getElementById("insert-input-release_year").value;
+                var rating = document.getElementById("insert-input-rating").value;
+
+                let passed = true;
+
+                //validate type
+                //if type.lower not in ["movie", "tvshow"]:
+                let input = document.getElementById("insert-input-type");
+                let errorElement = document.getElementById("insert-input-type-error");
+                if (type.toLowerCase() != "movie" && type.toLowerCase() != "tv show") {
+
+                    errorElement.textContent = "Type must be either 'Movie' or 'TV Show'.";
+                    input.classList.add("error");
+                    
+                    passed = false;
+                    
+                }
+                else {
+                    errorElement.textContent = "";
+                    input.classList.remove("error");
+                }
+                //validate year
+                input = document.getElementById("insert-input-release_year");
+                errorElement = document.getElementById("insert-input-release_year-error");
+                if (isNaN(year) || year < 1900 || year > 2021) {
+
+                    errorElement.textContent = "Release Year must be numeric and between 1900 and 2021.";
+                    input.classList.add("error");
+                    
+                    passed = false;
+                }
+                else {
+                    errorElement.textContent = "";
+                    input.classList.remove("error");
+                }
+                
+                input = document.getElementById("insert-input-genres");
+                errorElement = document.getElementById("insert-input-genres-error");
+                
+                //validate date_add
+                input = document.getElementById("insert-input-date_add");
+                errorElement = document.getElementById("insert-input-date_add-error");
+                //if date_added not in format YYYY-MM-DD, force sections to be number
+                if (date_added.length != 10 || isNaN(date_added.substring(0,4)) || isNaN(date_added.substring(5,7)) || isNaN(date_added.substring(8,10))||
+                    date_added[4] != "-" || date_added[7] != "-") {
+
+                    errorElement.textContent = "Date Added must be in the format YYYY-MM-DD.";
+                    input.classList.add("error");
+                    
+                    passed = false;
+                }
+                else {
+                    errorElement.textContent = "";
+                    input.classList.remove("error");
+                }
+                
+                //validate rating
+                input = document.getElementById("insert-input-rating");
+                errorElement = document.getElementById("insert-input-rating-error");
+
+                if (!(rating.toString().match(/^([0-9]|10)(\.[0-9])$/))) {
+                    
+                    errorElement.textContent = "Rating must match 0.0 - 10.0 (with the decimal)";
+                    input.classList.add("error");
+                    passed = false;
+
+                } 
+                else {
+                    errorElement.textContent = "";
+                    input.classList.remove("error");
+                }
+                  
+
+
+
+                  
+                if (passed == false) {
+                    event.preventDefault();
+                    returntoPreviousPage();
+                }
+                else {
+                    return true;
+                }
+            }
+    
+    </script>
 
 </head>
+
 <body class="body">
-<!-- header -->
-<header class="header">
-    <div class="header__wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="header__content">
-                        <!-- header logo -->
-                        <a href="/" class="header__logo">
-                            <img src="../static/img/logo.svg" alt="">
-                        </a>
-                        <!-- end header logo -->
-
-                        <!-- header nav -->
-                        <ul class="header__nav">
-
-                            <li class="header__nav-item">
-                                <a href="/" class="header__nav-link">Home</a>
-                            </li>
-
-                            <li class="header__nav-item">
-                                <a href="/movies/1" class="header__nav-link">Movies</a>
-                            </li>
-
-                            <li class="header__nav-item">
-                                <a href="/tvshows/1" class="header__nav-link">TV Shows</a>
-                            </li>
-
-                            <li class="header__nav-item">
-                                <a href="/insert" class="header__nav-link">Insert Data</a>
-                            </li>
-
-                            <li class="header__nav-item">
-                                <a href="/about" class="header__nav-link">About</a>
-                            </li>
-
-                        </ul>
-                        <!-- end header nav -->
-
-                        <!-- header auth -->
-                        <div class="header__auth">
-                            <button class="header__search-btn" type="button">
-                                <i class="icon ion-ios-search"></i>
-                            </button>
-
-                            <a href="signin.html" class="header__sign-in">
-                                <i class="icon ion-ios-log-in"></i>
-                                <span>sign in</span>
+    <!-- header -->
+    <header class="header">
+        <div class="header__wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="header__content">
+                            <!-- header logo -->
+                            <a href="/" class="header__logo">
+                                <img src="../static/img/logo.svg" alt="">
                             </a>
-                        </div>
-                        <!-- end header auth -->
+                            <!-- end header logo -->
 
-                        <!-- header menu btn -->
-                        <button class="header__btn" type="button">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                        <!-- end header menu btn -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <!-- header nav -->
+                            <ul class="header__nav">
 
-    <!-- header search -->
-    <form action="/search" class="header__search" method="get">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="header__search-content">
-                        <input name="query" placeholder="Search for a movie, TV Series or person that you are looking for">
+                                <li class="header__nav-item">
+                                    <a href="/" class="header__nav-link">Home</a>
+                                </li>
 
-                        <button type="submit">search</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    <!-- end header search -->
-</header>
-<!-- end header -->
-<section class="content"style="padding-top: 90px;">
-    <div class="content__head" style="margin-bottom: 0px;">
-        <div class="container"style="padding-top: 4vh;padding-bottom: 5vh;" >
-            <div class="row">
-                <h1 class="home__title" style="padding-bottom: 3vh;"><b>Insert</b> Data</h1>
-            </div>
-            <div class="row" style="display: flex; justify-content: center;">
-                <button class="filter__btn" id="insert-btn" style = "margin: 0 1rem;">Insert</button>
-                <button class="filter__btn "id="data-btn"style = "margin: 0 1rem;">Edit Data</button>
-                <button class="filter__btn" id="remove-btn"style = "margin: 0 1rem;">Remove</button>
-            </div>
+                                <li class="header__nav-item">
+                                    <a href="/movies/1" class="header__nav-link">Movies</a>
+                                </li>
 
-        </div>
-    </div>
-    <div class="content__head">
-        <div class="container" style="padding-top: 5vh;">
-            <div class="row" > 
-                <div id="insert-div" class="hidden">
-                    <form action="/insert" method="post">
-                        <input hidden value="insert" name="action">
-                        <div class="row justify-content-end" style="display: flex;">
-                            <div class="col-md-6">
-                                <h1 class="home__title" style="padding-bottom: 3vh;">Insert</h1>
-                                <label for="insert-input-title">
-                                    <h3 class="section__text">Title</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-title" name="insert-input-title">
-                    
-                                <label for="insert-input-type">
-                                    <h3 class="section__text">Type</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-type" name="insert-input-type">
-                    
-                                <label for="insert-input-img">
-                                    <h3 class="section__text">Image</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-img" name="insert-input-img">
-                    
-                                <label for="insert-input-genres">
-                                    <h3 class="section__text">Genres</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-genres" name="insert-input-genres">
+                                <li class="header__nav-item">
+                                    <a href="/tvshows/1" class="header__nav-link">TV Shows</a>
+                                </li>
 
-                                <label for="insert-input-countries">
-                                    <h3 class="section__text">Countries</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-countries" name="insert-input-countries">
+                                <li class="header__nav-item">
+                                    <a href="/insert" class="header__nav-link">Insert Data</a>
+                                </li>
 
-                                <label for="insert-input-trailer">
-                                    <h3 class="section__text">Trailer URL</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-trailer" name="insert-input-trailer">
+                                <li class="header__nav-item">
+                                    <a href="/about" class="header__nav-link">About</a>
+                                </li>
+
+                            </ul>
+                            <!-- end header nav -->
+
+                            <!-- header auth -->
+                            <div class="header__auth">
+                                <button class="header__search-btn" type="button">
+                                    <i class="icon ion-ios-search"></i>
+                                </button>
+
+
                             </div>
-                            <div class="col-md-6">
-                                <h1 class="home__title" style="padding-bottom: 3vh;">‎</h1>
-                                <label for="insert-input-desc">
-                                    <h3 class="section__text">Description</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-desc" name="insert-input-desc">
-                    
-                                <label for="insert-input-release_year">
-                                    <h3 class="section__text">Release Year</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-release_year" name="insert-input-release_year">
-                    
-                                <label for="insert-input-date_add">
-                                    <h3 class="section__text">Added Date</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-date_add" name="insert-input-date_add">
-                    
-                                <label for="insert-input-director_name">
-                                    <h3 class="section__text">Director Name</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-director_name" name="insert-input-director_name">
+                            <!-- end header auth -->
 
-                                <label for="insert-input-cast">
-                                    <h3 class="section__text">Cast</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-cast" name="insert-input-cast">
-                             
-                                <label for="insert-input-rating">
-                                    <h3 class="section__text">Rating</h3>
-                                </label>
-                                <input class="form__input" type="text" id="insert-input-rating" name="insert-input-rating">
-            
-                                <br>
-                                <div class="d-flex justify-content-end" style="padding-bottom: 5vh;">
-                                    <input type="submit" class="form__btn" value="Submit">
+                            <!-- header menu btn -->
+                            <button class="header__btn" type="button">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                            <!-- end header menu btn -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- header search -->
+        <form action="/search" class="header__search" method="get">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="header__search-content">
+                            <input name="query"
+                                placeholder="Search for a movie, TV Series or person that you are looking for">
+
+                            <button type="submit">search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- end header search -->
+    </header>
+    <!-- end header -->
+    <section class="content" style="padding-top: 90px;">
+        <div class="content__head" style="margin-bottom: 0px;">
+            <div class="container" style="padding-top: 4vh;padding-bottom: 5vh;">
+                <div class="row">
+                    <h1 class="home__title" style="padding-bottom: 3vh;"><b>Insert</b> Data</h1>
+                </div>
+                <div class="row" style="display: flex; justify-content: center;">
+                    <button class="filter__btn" id="insert-btn" style="margin: 0 1rem;">Insert</button>
+                    <button class="filter__btn " id="data-btn" style="margin: 0 1rem;">Edit Data</button>
+                    <button class="filter__btn" id="remove-btn" style="margin: 0 1rem;">Remove</button>
+                </div>
+            </div>
+        </div>
+        <div class="content__head">
+            <div class="container" style="padding-top: 5vh;">
+                <div class="row">
+                    <div id="insert-div" {%if show_insert_div%}class{%else%}class="hidden" {%endif%}
+                        style="width: -webkit-fill-available;">
+                        <form id="insertform" action="/insert" method="post">
+                            <input hidden value="insert" name="action">
+                            <div class="row justify-content-end" style="display: flex;padding-top: 20px;">
+                                <div class="col-md-6">
+                                    <h1 class="home__title" style="padding-bottom: 3vh;">Insert</h1>
+                                    <p style="color: #ffffffb3; margin-top: -2em;position:absolute;">All fields with a <span style="color: white; font-weight: bold;">*</span> are required.</p>
+
+
+
+
+                                    <label for="insert-input-title">
+                                        <h3 class="section__text">*Title</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-title"
+                                        name="insert-input-title" required placeholder="Enter title">
+
+                                    <label for="insert-input-type">
+                                        <h3 class="section__text">*Type</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-type"
+                                        name="insert-input-type" required placeholder="Movie or Tv Show (case insensitive)">
+                                    <span class="error-message" id="insert-input-type-error"></span>
+
+                                    <label for="insert-input-img">
+                                        <h3 class="section__text">Image</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-img" name="insert-input-img" placeholder="Poster image URL">
+
+
+                                    <label for="insert-input-genres">
+                                        <h3 class="section__text">Genres</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-genres" name="insert-input-genres" placeholder="Genres, separated by ','"> 
+
+                                    <label for="insert-input-countries">
+                                        <h3 class="section__text">Countries</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-countries"
+                                        name="insert-input-countries" placeholder="Countries, separated by ','">
+
+                                    <label for="insert-input-trailer">
+                                        <h3 class="section__text">Trailer </h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-trailer"
+                                        name="insert-input-trailer" placeholder="YouTube key of video, eg: qtRKdVHc-cE">
                                 </div>
+                                <div class="col-md-6">
+                                    <h1 class="home__title" style="padding-bottom: 3vh;">‎</h1>
+                                    <label for="insert-input-desc">
+                                        <h3 class="section__text">Description</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-desc"
+                                        name="insert-input-desc" placeholder="Enter description text">
+
+                                    <label for="insert-input-release_year">
+                                        <h3 class="section__text">*Release Year</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-release_year"
+                                        name="insert-input-release_year" required placeholder="Release year, from 1900 to 2021">
+                                    <span class="error-message" id="insert-input-release_year-error"></span>
+
+                                    <label for="insert-input-date_add">
+                                        <h3 class="section__text">Added Date</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-date_add"
+                                        name="insert-input-date_add"  placeholder="YYYY-MM-DD">
+                                        <span class="error-message" id="insert-input-date_add-error"></span>
+
+                                    <label for="insert-input-director_name">
+                                        <h3 class="section__text">Director Name</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-director_name"
+                                        name="insert-input-director_name"  placeholder="Director(s), separated by ','">
+
+                                    <label for="insert-input-cast">
+                                        <h3 class="section__text">Cast</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-cast"
+                                        name="insert-input-cast"  placeholder="Member(s) of cast, separated by ','">
+
+                                    <label for="insert-input-rating">
+                                        <h3 class="section__text">Rating</h3>
+                                    </label>
+                                    <input class="form__input" type="text" id="insert-input-rating"
+                                        name="insert-input-rating" placeholder="Rating, eg: 7.8">
+                                        <span class="error-message" id="insert-input-rating-error"></span>
+
+                                    <br>
+                                    <div class="d-flex justify-content-end" style="padding-bottom: 5vh;">
+                                        {%if success_insert == "True"%}
+                                        <h3 class="section__text" style="padding-bottom: 3vh;color: #4CAF50;">Insertion
+                                            Successful, you can now search for your inserted show</h3>
+                                        {% elif success_insert == "False"%}
+                                        <h3 class="section__text" style="padding-bottom: 3vh;color: #f44336;">Insertion
+                                            Failed</h3>
+                                        {%endif%}
+                                        <input type="submit" class="form__btn" value="Submit">
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
-                    </form>
+                        </form>
+
+                    </div>
                 </div>
-            </div>
-                
-                <div class="row"  > 
-                    <div id="remove-div" class="hidden" style="width: -webkit-fill-available;">
+
+                <div class="row">
+                    <div id="remove-div" {%if show_remove_div%}class{%else%}class="hidden" {%endif%}
+                        style="width: -webkit-fill-available;">
                         <h1 class="home__title" style="padding-bottom: 3vh;">Remove</h1>
                         <form action="/insert" method="post">
                             <input hidden value="remove" name="action">
@@ -221,156 +345,224 @@
                             </label>
                             <input class="form__input" type="text" id="remove-input" name="remove-input">
                             <div class="d-flex justify-content-end" style="padding-bottom: 5vh;">
+                                {%if success_remove == "True"%}
+                                <h3 class="section__text" style="padding-bottom: 3vh;color: #4CAF50;">Movie Removed
+                                    Successfully</h3>
+                                {% elif success_remove == "False"%}
+                                <h3 class="section__text" style="padding-bottom: 3vh;color: #f44336;">Movie Not Found
+                                </h3>
+                                {%endif%}
                                 <input type="submit" class="form__btn" value="Submit">
                             </div>
                         </form>
+
                     </div>
                 </div>
-                <div class="row"  > 
-                    <div id="data-div" class="hidden">
-                        <form action="/insert" method="post">
-                            <input hidden value="edit" name="action">
-                            <div class="row justify-content-end" style="display: flex;">
-                                <div class="col-md-6">
-                                    <h1 class="home__title" style="padding-bottom: 3vh;">Edit</h1>
-                                    <label for="edit-input-title">
-                                        <h3 class="section__text">Title</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-title" name="edit-input-title">
-                        
-                                    <label for="edit-input-type">
-                                        <h3 class="section__text">Type</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-type" name="edit-input-type">
-                        
-                                    <label for="edit-input-img">
-                                        <h3 class="section__text">Image</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-img" name="edit-input-img">
-                        
-                                    <label for="edit-input-genres">
-                                        <h3 class="section__text">Genres</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-genres" name="edit-genres">
-    
-                                    <label for="edit-input-countries">
-                                        <h3 class="section__text">Countries</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-countries" name="edit-input-countries">
-    
-                                    <label for="edit-input-trailer">
-                                        <h3 class="section__text">Trailer URL</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-trailer" name="edit-input-trailer">
-                                </div>
-                                <div class="col-md-6">
-                                    <h1 class="home__title" style="padding-bottom: 3vh;">‎</h1>
-                                    <label for="edit-input-desc">
-                                        <h3 class="section__text">Description</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-desc" name="edit-input-desc">
-                        
-                                    <label for="edit-input-release_year">
-                                        <h3 class="section__text">Release Year</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-release_year" name="edit-input-release_year">
-                        
-                                    <label for="edit-input-date_add">
-                                        <h3 class="section__text">Added Date</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-date_add" name="edit-input-date_add">
-                        
-                                    <label for="edit-input-director_name">
-                                        <h3 class="section__text">Director Name</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-director_name" name="edit-director_name">
-    
-                                    <label for="edit-input-cast">
-                                        <h3 class="section__text">Cast</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="edit-input-cast" name="edit-input-cast">
 
-                                    <label for="insert-input-rating">
-                                        <h3 class="section__text">Rating</h3>
-                                    </label>
-                                    <input class="form__input" type="text" id="insert-input-rating" name="insert-input-rating">
-                                   
-                                    <br>
-                                    <div class="d-flex justify-content-end" style="padding-bottom: 5vh;">
-                                        <input type="submit" class="form__btn" value="Submit">
+                <div class="row">
+                    <div id="data-div" {%if show_data_div%}class{%else%}class="hidden" {%endif%}
+                        style="width: -webkit-fill-available;">
+                        <form action="/insert" method="post">
+                            <div class="row" style="align-items: center;">
+                                <div class="col-md-10">
+                                    <input hidden value="edit-get" name="action">
+                                    <input hidden {%if edit_data == None%} value ="none"{%else%} value= "{{edit_data.title_id.value}}"{%endif%}name="id">
+                                    <h1 class="home__title" style="padding-bottom: 3vh;">Edit</h1>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <label for="data-div-title">
+                                                <h3 class="section__text">Title</h3>
+                                            </label>
+                                            <input class="form__input" type="text" id="data-div-title" name="data-div-title"
+                                                value="{{edit_data.title.value}}">
+                                        </div>
+                                        
+                                        <div class="col-md-3 d-flex justify-content-center"
+                                            style="align-items:center;padding-top: 14px;">
+                                            <button class="filter__btn" id="insert-expand" name="insert-expand"
+                                                style="margin: 0 1rem; width: 90%;">Select a Movie</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    {%if show_data_div and success_get_edit == "True"%}
+                                        {% if edit_data.img.value != "NO_IMAGE" %}
+                                            <img src="{{ edit_data.img.value }}" alt="" style="width: 160px; height: 240px;">
+                                        {% else %}
+                                            <img src="../static/img/NO_IMAGE.jpg" alt="Image not found" style="width: 160px; height: 240px;">
+                                        {% endif %}
+                                    {%endif%}
+                                </div>
+
+                            </div>
+
+                            {%if success_get_edit == "True"%}
+                            <h1 class="home__title" style="padding-bottom: 3vh;color: #4CAF50;">Sucess</h1>
+                            {% elif success_get_edit == "False"%}
+                            <h1 class="home__title" style="padding-bottom: 3vh;color: #f44336;">Error Getting Movie Data
+                            </h1>
+                            {%endif%}
+
+                            {%if show_data_div and success_get_edit == "True"%}
+                            <div class="content__head" style="margin-bottom: 0px;box-shadow: none">
+                                <div class="row justify-content" style="display: flex;padding-top: 10px;">
+                                    <div class="col-md-6">
+                                        <label for="data-div-none">
+                                            <h3 class="section__text">‎</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-none" name="data-div-none"
+                                            style="visibility: hidden;">
+
+                                        <label for="data-div-type">
+                                            <h3 class="section__text">Type</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-type" name="data-div-type"
+                                            value="{{edit_data.type.value}}">
+
+                                        <label for="data-div-image">
+                                            <h3 class="section__text">Image</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-image" name="data-div-image"
+                                            value="{{edit_data.img.value}}">
+
+                                        <label for="data-div-genres">
+                                            <h3 class="section__text">Genres</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-genres"
+                                            name="data-div-genres" value="{{edit_data.genres.value}}">
+
+                                        <label for="data-div-countries">
+                                            <h3 class="section__text">Countries</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-countries"
+                                            name="data-div-countries" value="{{edit_data.countries.value}}">
+
+                                        <label for="data-div-trailer">
+                                            <h3 class="section__text">Trailer URL</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-trailer"
+                                            name="data-div-trailer" value="{{edit_data.trailer.value}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="data-div-desc">
+                                            <h3 class="section__text">Description</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-desc" name="data-div-desc"
+                                            value="{{edit_data.desc.value}}">
+
+                                        <label for="data-div-rel_year">
+                                            <h3 class="section__text">Release Year</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-rel_year"
+                                            name="data-div-rel_year" value="{{edit_data.release_year.value}}">
+
+                                        <label for="data-div-added_date">
+                                            <h3 class="section__text">Added Date</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-added_date"
+                                            name="data-div-added_date" value="{{edit_data.date_add.value}}">
+
+                                        <label for="data-div-director">
+                                            <h3 class="section__text">Director Name</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-director"
+                                            name="data-div-director" value="{{edit_data.directors.value}}">
+
+                                        <label for="data-div-cast">
+                                            <h3 class="section__text">Cast</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-cast" name="data-div-cast"
+                                            value="{{edit_data.persons.value}}">
+
+                                        <label for="data-div-rating">
+                                            <h3 class="section__text">Rating</h3>
+                                        </label>
+                                        <input class="form__input" type="text" id="data-div-rating"
+                                            name="data-div-rating" value="{{edit_data.rating.value}}">
+
+                                        <br>
+                                        <div class="d-flex justify-content-end" style="padding-bottom: 5vh;">
+                                            <input type="submit" class="form__btn" name ="update"value="Submit">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            {%endif%}
                         </form>
                     </div>
-                 </div>
-            </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+        </div>
+    </section>
 
-	<!-- JS -->
-	<script src="../static/js/jquery-3.3.1.min.js"></script>
-	<script src="../static/js/bootstrap.bundle.min.js"></script>
-	<script src="../static/js/owl.carousel.min.js"></script>
-	<script src="../static/js/jquery.mousewheel.min.js"></script>
-	<script src="../static/js/jquery.mCustomScrollbar.min.js"></script>
-	<script src="../static/js/wNumb.js"></script>
-	<script src="../static/js/nouislider.min.js"></script>
-	<script src="../static/js/plyr.min.js"></script>
-	<script src="../static/js/jquery.morelines.min.js"></script>
-	<script src="../static/js/photoswipe.min.js"></script>
-	<script src="../static/js/photoswipe-ui-default.min.js"></script>
-	<script src="../static/js/main.js"></script>
+    <!-- JS -->
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/owl.carousel.min.js"></script>
+    <script src="../static/js/jquery.mousewheel.min.js"></script>
+    <script src="../static/js/jquery.mCustomScrollbar.min.js"></script>
+    <script src="../static/js/wNumb.js"></script>
+    <script src="../static/js/nouislider.min.js"></script>
+    <script src="../static/js/plyr.min.js"></script>
+    <script src="../static/js/jquery.morelines.min.js"></script>
+    <script src="../static/js/photoswipe.min.js"></script>
+    <script src="../static/js/photoswipe-ui-default.min.js"></script>
+    <script src="../static/js/main.js"></script>
 </body>
 <script>
-    $(document).ready(function(){
-    $("#insert-btn").click(function(){
-        $("#insert-div").removeClass("hidden");
-        $("#remove-div").addClass("hidden");
-        $("#data-div").addClass("hidden");
+    $(document).ready(function () {
+        $("#insert-btn").click(function () {
+            $("#insert-div").removeClass("hidden");
+            $("#remove-div").addClass("hidden");
+            $("#data-div").addClass("hidden");
+        });
+        $("#remove-btn").click(function () {
+            $("#insert-div").addClass("hidden");
+            $("#remove-div").removeClass("hidden");
+            $("#data-div").addClass("hidden");
+        });
+        $("#data-btn").click(function () {
+            $("#insert-div").addClass("hidden");
+            $("#remove-div").addClass("hidden");
+            $("#data-div").removeClass("hidden");
+        });
+        $("#insert-expand").click(function () {
+            $("#data-div-expand").removeClass("hidden");
+        });
+
     });
-    $("#remove-btn").click(function(){
-        $("#insert-div").addClass("hidden");
-        $("#remove-div").removeClass("hidden");
-        $("#data-div").addClass("hidden");
-    });
-    $("#data-btn").click(function(){
-        $("#insert-div").addClass("hidden");
-        $("#remove-div").addClass("hidden");
-        $("#data-div").removeClass("hidden");
-    });
-});
 </script>
 <style>
-.button {
-	background-color: #4CAF50;
-	border: none;
-	color: white;
-	padding: 12px 16px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
-	border-radius: 10px;
-}
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 12px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
 
-.button--insert {
-	background-color: #4CAF50;
-}
+    .button--insert {
+        background-color: #4CAF50;
+    }
 
-.button--remove {
-	background-color: #FF9800;
-}
+    .button--remove {
+        background-color: #FF9800;
+    }
 
-.button--data {
-	background-color: #2196F3;
-}
+    .button--data {
+        background-color: #2196F3;
+    }
 
-.hidden {
-	display: none;
-}
+    .hidden {
+        display: none;
+    }
 </style>
+
 </html>
