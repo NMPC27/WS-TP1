@@ -59,7 +59,6 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
         #this is a searchç
 
         searchArgs = validate_request(requests.GET)
-        print(searchArgs)
 
 
         queryargs = {k:searchArgs[k] for k in searchArgs.keys() if searchArgs[k]!="All" and searchArgs[k]!=""}
@@ -73,7 +72,8 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
             "filter_country": searchArgs.get('country') if searchArgs.get('country') else "All",
             "rating": searchArgs.get('rating') if searchArgs.get('rating') else "All",
             'type': searchArgs.get('type') if searchArgs.get('type') else "All",
-            'page': searchArgs.get('page') if searchArgs.get('page') else "1"
+            'page': searchArgs.get('page') if searchArgs.get('page') else "1",
+            'order_by': searchArgs.get('order_by') if searchArgs.get('order_by') else "Off",
 
         }
 
@@ -82,7 +82,7 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
             args["search"]= searchArgs[list(searchArgs.keys())[0]]
 
         else:
-            string_gen = (queryargs[x] for x in queryargs.keys() if x!="limit" and x!="page")
+            string_gen = (queryargs[x] for x in queryargs.keys() if x!="limit" and x!="page" and x!="order_by")
             #comma between each element, except last
             args["search"] = ", ".join(string_gen)
 
@@ -98,7 +98,8 @@ def search(requests): # pesquisa por pessoas e nomes de filmes/series
         'filter_country': "All" ,
         'rating': "All",
         'type': "All",
-        'page': "1"
+        'order_by': "Off",
+        'page': "1",
     }
 
     return render(requests, 'search.html', args)
@@ -112,7 +113,7 @@ def insert(requests):
     show_data_div = False
     show_insert_div = False
     show_remove_div = False
-
+    newid = None
     success_insert = "None"
     success_get_edit = "None"
     success_remove = "None"
@@ -163,33 +164,31 @@ def insert(requests):
                 if trailer == "":
                     trailer = None
 
-                insertData(title,type=type, rating=rating, director=director, img=img, listed_in=listed_in, country=country, description=description, release_year=release_year, date_added=date_added, cast=cast,trailer=trailer)
-                success_insert = "True"
+                newid = insertData(title,type=type, rating=rating, director=director, img=img, listed_in=listed_in, country=country, description=description, release_year=release_year, date_added=date_added, cast=cast,trailer=trailer)
+                if int(newid) != -1:
+                    success_insert = "True"
+                else:
+                    success_insert = "False"
             else:
                 success_insert = "False"
 
         elif requests.POST["action"] == "remove" :
             show_remove_div = True
             if requests.POST["remove-input"] != "":
-                deleteByTitle(requests.POST["remove-input"])
+                res = deleteByTitle(requests.POST["remove-input"])
                 success_remove = "True"
             else:
                 success_remove = "False"
 
         elif requests.POST["action"] == "edit-get" :
             show_data_div = True
-            print(requests.POST["data-div-title"])
             if requests.POST["id"] != "none" and requests.POST["id"] != "":
-                print ("req",requests.POST)
-                print ("id:",requests.POST["id"])
                 title = getTitleById(requests.POST["id"])
                 if len(title) >=1:
                     title = title[0]["title"]["value"]
-                print("title:",title)
                 show = get_showById(requests.POST["id"])
                 if len(show) >=1:
                     show = show[0]
-                    print(show)
                     type = requests.POST["data-div-type"].strip()
                     rating = requests.POST["data-div-rating"].strip()
                     director = requests.POST["data-div-director"].strip().split(",")
@@ -226,7 +225,7 @@ def insert(requests):
                         if trailer == "":
                             trailer = "UNKNOWN"
                         deleteByTitle(title)
-                        insertData(title, type=type, rating=rating, director=director, img=img, listed_in=listed_in, country=country, description=description, release_year=release_year, date_added=date_added, cast=cast,trailer=trailer,title_id=requests.POST["id"].replace("s",""))
+                        newid = insertData(title, type=type, rating=rating, director=director, img=img, listed_in=listed_in, country=country, description=description, release_year=release_year, date_added=date_added, cast=cast,trailer=trailer,title_id=requests.POST["id"].replace("s",""))
 
             if requests.POST["data-div-title"] != "":
                 dic ={}
@@ -245,6 +244,9 @@ def insert(requests):
     args = {"show_data_div": show_data_div , "success_get_edit": success_get_edit, "success_insert": success_insert, "success_remove": success_remove, "show_insert_div": show_insert_div, "show_remove_div": show_remove_div,
             "edit_data" : edit_data
             }
+    if len(requests.POST.keys())!=0:
+        if requests.POST["action"] == "edit-get" or requests.POST["action"] == "insert":
+            args["newid"] = newid
     return render(requests, 'insert.html', args)
 
 def test_site(requests):

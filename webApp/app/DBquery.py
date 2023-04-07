@@ -85,12 +85,6 @@ def select_all_movies_12(page):
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
     res = json.loads(res)
-    # for e in res['results']['bindings']:
-    #     print(e['title_id']['value'])
-    #     print(e['title']['value'])
-    #     print("Movie")
-    #     print(e['img']['value'])
-    #     print("-----------------")
 
     res = res['results']['bindings']
     for e in res:
@@ -126,12 +120,6 @@ def select_all_TVshow_12(page):
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
     res = json.loads(res)
-    # for e in res['results']['bindings']:
-    #     print(e['title_id']['value'])
-    #     print(e['title']['value'])
-    #     print("TV Show")
-    #     print(e['img']['value'])
-    #     print("-----------------")
 
     res = res['results']['bindings']
     for e in res:
@@ -176,12 +164,6 @@ def get_showById(id):
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
     res = json.loads(res)
     
-    # for e in res['results']['bindings']:
-    #     print(e['title_id']['value'])
-    #     print(name)
-    #     print(e['type']['value'])
-    #     print(e['img']['value'])
-    #     print("-----------------")
     return res['results']['bindings']
 
 
@@ -237,6 +219,7 @@ def searchQuery(argsdict):
     
     query = """
         PREFIX mov:<http://netflixUA.org/>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         
         SELECT DISTINCT ?title ?type ?title_id ?img ?rating (GROUP_CONCAT(DISTINCT ?genre; SEPARATOR=", ") as ?genres) (GROUP_CONCAT(DISTINCT ?country; SEPARATOR=", ") as ?countries) ?desc ?release_year ?date_add (GROUP_CONCAT(DISTINCT ?director_name; SEPARATOR=", ") as ?directors)  ?trailer
         WHERE {
@@ -380,13 +363,27 @@ def searchQuery(argsdict):
             lower, upper = release_year.split('-')
         query += f"HAVING(xsd:integer(?release_year) >= {lower} && xsd:integer(?release_year) < {upper}) \n"
 
+
+    if argsdict.get('order_by') != None:
+        if argsdict['order_by'] == "Alphabetical ↑":
+            query += "ORDER BY ASC (?title) \n"
+        elif argsdict['order_by'] == "Alphabetical ↓":
+            query += "ORDER BY DESC (?title) \n"
+        elif argsdict['order_by'] == "Rating ↑":
+            query += "ORDER BY ASC (xsd:float(?rating))\n"
+        else:
+            query += "ORDER BY DESC (xsd:float(?rating))\n"
+    
+        
+
+    
     page = argsdict.get('page') if argsdict.get('page') != None else 1
     query += "OFFSET "+ str((int(page)-1)*12)
     limit = argsdict.get('limit')
     if limit != None:
         query += " LIMIT "+str(limit)
         
-    
+
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
     try:
@@ -400,12 +397,12 @@ def searchQuery(argsdict):
 def getNewTitleId():#!TODO GET A NEW ID FROM DB
     
     query= """
-    PREFIX mov:<http://netflixUA.org/>
-
-    SELECT (COUNT(?id) AS ?numShows)
-    WHERE {
-        ?id mov:title ?title .
-    } 
+        PREFIX mov:<http://netflixUA.org/>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        SELECT (MAX(xsd:integer(SUBSTR(str(?id), 28))) AS ?maxIdNumeric)
+        WHERE {
+            ?id mov:title ?title .
+        }
     """
     
     payload_query = {"query": query}
@@ -413,15 +410,16 @@ def getNewTitleId():#!TODO GET A NEW ID FROM DB
     try:
         res = json.loads(res)
     except:
-        return -1
-    CurrID = int(res['results']['bindings'][0]['numShows']['value'])
-    # return str(CurrID+1)
-    return "9999"
+        return str(-1)
+    CurrID = int(res['results']['bindings'][0]['maxIdNumeric']['value'])
+    return str(CurrID+1)
 
 def insertData(title, type=None, rating=None, director=None, img=None, listed_in=None, country=None, description=None, release_year=None, date_added=None, cast=None,trailer=None,title_id=None):
     
     if title_id == None:
         title_id = getNewTitleId()
+        if title_id == str(-1):
+            return -1
     
     if type == None:
         type ="UNKNOWN"
@@ -498,13 +496,11 @@ def insertData(title, type=None, rating=None, director=None, img=None, listed_in
             query += " title:"+title_id+" mov:cast "+cast_uri+" .\n"
             query += cast_uri+" mov:name '"+name.strip()+"' .\n"
     query += "}"
-    print(query)
+    # print(query)
     payload_query = {"update": query}
     res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
     
-    # res = json.loads(res)
-    
-    # return res['results']['bindings']
+    return title_id
 
 
 def deleteByTitle(title):
@@ -544,9 +540,9 @@ def deleteByTitle(title):
             }
         
     """
-    print("delete",query)
     payload_query = {"update": query}
-    res = accessor.sparql_update(body=payload_query,repo_name=repo_name)
+    accessor.sparql_update(body=payload_query,repo_name=repo_name)
+
 
 def getTitleById(id):
     query = """
@@ -560,8 +556,8 @@ def getTitleById(id):
     """
     payload_query = {"query": query}
     res = accessor.sparql_select(body=payload_query,repo_name=repo_name)
-    print(query)
-    print(res)
+    # print(query)
+    # print(res)
     res = json.loads(res)
     
     return res['results']['bindings']

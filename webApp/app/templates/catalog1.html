@@ -30,7 +30,7 @@
 	<meta name="description" content="">
 	<meta name="keywords" content="">
 	<meta name="author" content="Dmitry Volkov">
-	<title>FlixGo – Online Movies, TV Shows & Cinema HTML Template</title>
+	<title>FlixUA – Online Movies, TV Shows</title>
 
 </head>
 <body class="body">
@@ -44,7 +44,7 @@
 						<div class="header__content">
 							<!-- header logo -->
 							<a href="/" class="header__logo">
-								<img src="../static/img/logo.svg" alt="">
+								<img style="width: 55%;"src="../static/img/flix.png" alt="">
 							</a>
 							<!-- end header logo -->
 
@@ -138,7 +138,7 @@
 	<!-- end page title -->
 
 	<!-- filter -->
-	<div class="filter">
+	<div class="filter" style="padding-right: 4vw;">
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
@@ -156,7 +156,7 @@
 								<span class="filter__item-label">GENRE:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value="All" id="genre" name="genre" style="width: 9.5vw;">
+									<input readonly="readonly" value="All" id="genre" name="genre" style="width: 8.5vw;">
 									<span></span>
 								</div>
 
@@ -196,7 +196,7 @@
 								<span class="filter__item-label">RELEASE YEAR:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="release_year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value="All" id="release_year" name="release_year" style="width: 5vw;">
+									<input readonly="readonly" value="All" id="release_year" name="release_year" style="width: 4.5vw;">
 									<span></span>
 								</div>
 
@@ -223,7 +223,7 @@
 								<span class="filter__item-label">COUNTRY:</span>
 
 								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter_" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<input readonly="readonly" value="All" id="filter_" name="filter_" style="width: 10.5vw;">
+									<input readonly="readonly" value="All" id="filter_" name="filter_" style="width: 8vw;">
 									<span></span>
 								</div>
 
@@ -242,6 +242,41 @@
 								</div>
 
 								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="rating"><li>All</li><li>9-10</li><li>8-9</li><li>7-8</li><li>6-7</li><li>5-6</li><li>4-5</li><li>3-4</li><li>2-3</li><li>1-2</li><li>0-1</li>
+								</ul>
+							</div>
+							<!-- end filter item -->
+							
+                            <!-- filter item -->
+							<div class="filter__item" id="type">
+								<span class="filter__item-label">TYPE:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input readonly="readonly" value="All" id="type" name="type" style="width: 4.5vw;">
+									<span></span>
+								</div>
+
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="type">
+									<li>All</li>
+									<li>Movies</li>
+									<li>Tv Shows</li>
+								</ul>
+							</div>
+							<!-- end filter item -->
+							<!-- filter item -->
+							<div class="filter__item" id="order_by">
+								<span class="filter__item-label">ORDER BY:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="order_by" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input readonly="readonly" value="Off" id="order_by" name="order_by" style="width: 7vw;">
+									<span></span>
+								</div>
+
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="order_by">
+									<li>Off</li>
+									<li>Alphabetical ↑</li>
+									<li>Alphabetical ↓</li>
+									<li>Rating ↑</li>
+									<li>Rating ↓</li>
 								</ul>
 							</div>
 							<!-- end filter item -->
