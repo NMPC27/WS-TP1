@@ -1,17 +1,23 @@
 # WS-TP1
 
+##Install dependencies
+`pip install -r requirements.txt`
+
+Alternatively, you can just install the dependencies manually:
+```bash
+pip install Django
 pip install s4api
+```
 
-atençao o repositorio stparkle tem de bater certo com a linha
-7 do DBquery.py - repo_name = "movies" #! change this to your repository name
+##Setup database
+1. Import DB/netflix_triples.net into GraphDB
+2. Set base IRI to `http://netflixUA.org`
+
+##Run server
+`python3 manage.py runserver`
 
 
-TODO:
--poder inserir comentarios
--poder remover filmes e editar
--login????
--graficos
--muitos filtros
--clicables
--create/update/delete coisas
+In the case that ==static files are not being served== , run the following command instead:
+`python3 manage.py runserver --insecure`
 
+The server will be running on `http://localhost:8000`
