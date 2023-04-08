@@ -2,11 +2,15 @@ import json
 from s4api.graphdb_api import GraphDBApi
 from s4api.swagger import ApiClient
 import urllib
+import json
+import os
 
+config = json.loads(open(os.path.join(os.path.dirname(__file__), '../../config.json')).read())
+    
+endpoint = config['endpoint']
+repo_name = config['repo_name']
 
-endpoint = "http://localhost:7200"
-repo_name = "movies" #! change this to your repository name
-
+#!-----------------
 client = ApiClient(endpoint=endpoint)
 accessor = GraphDBApi(client)
 

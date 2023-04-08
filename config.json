@@ -1,0 +1,4 @@
+{
+    "endpoint" : "http://localhost:7200",
+    "repo_name" : "movies"
+}
