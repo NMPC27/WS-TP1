@@ -13,7 +13,7 @@ pip install s4api
 1. Import DB/netflix_triples.net into GraphDB repository named "movies"
 2. Set base IRI to `http://netflixUA.org`
 
-If the port of GraphDB is not the default 7200 or the chosen repository name is different, please update the `congif.json` file at the root of the project.
+If the port of GraphDB is not the default 7200 or the chosen repository name is different, please update the `config.json` file at the root of the project.
 
 ##Run server
 The only dependencies are Django and s4api, if those are already installed
