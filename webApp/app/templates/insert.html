@@ -431,8 +431,12 @@
                             </div>
 
                             {%if success_get_edit == "True"%}
-                            <h2 class="home__title" style="padding-bottom: 3vh;color: #4CAF50;font-size:22px">Success, click <a href="/details/s{{newid}}" style="color: #ff5860;background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;color: #ff5860;opacity: 0.8;">here</a> to view the edited show.</h2>
-                            {% elif success_get_edit == "False"%}
+                            {%if newid == None%}
+                                <h2 class="home__title" style="padding-bottom: 3vh;color: #4CAF50;font-size:22px">Success retrieving information from DB.</h2>
+                            {%else%}
+                                <h2 class="home__title" style="padding-bottom: 3vh;color: #4CAF50;font-size:22px">Success, click <a href="/details/s{{newid}}" style="color: #ff5860;background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;color: #ff5860;opacity: 0.8;">here</a> to view the edited show.</h2>
+                            {%endif%}
+                                {% elif success_get_edit == "False"%}
                             <h1 class="home__title" style="padding-bottom: 3vh;color: #f44336;">Error Getting Movie Data
                             </h1>
                             {%endif%}
